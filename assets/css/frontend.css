@@ -1,0 +1,1107 @@
+/* ========================================================
+    Bootstrap - Floating Form 
+===========================================================
+
+    — Defaults
+    — Label
+    — Input
+    — Checkbox 
+    — Radio
+    — File Input
+    — Buttons
+    — Alert Border
+    — Alerts
+    — Ratings
+    — Tab Panel
+
+======================================================== */
+
+/* ============ DEFAULTS =========== */
+
+.rave-form .form-heading {
+    margin-top: -70px;
+    padding: 20px;
+    background: #373a3c;
+    margin-bottom: 40px;
+    border-radius: 3px;
+    box-shadow: 0 16px 38px -12px rgba(0, 0, 0, 0.56), 0 4px 25px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+.rave-form .social-line a {
+    font-size: 18px;
+    color: #fff;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.rave-form .description {
+    float: left;
+    margin-bottom: 40px;
+}
+
+.rave-form .distance {
+    padding: 60px 0;
+}
+
+.rave-form .lineheight {
+    height: 30px;
+}
+
+.rave-form .icon.icon-primary {
+    color: #9c27b0;
+    font-size: 24px;
+    float: left;
+    padding-right: 16px;
+    margin-top: -6px;
+}
+
+form.rave-form {
+    background: #fff;
+    padding: 30px 20px;
+    position: relative;
+    width: 100%;
+    margin-top: 40px;
+    border-radius: 6px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.rave-form .form-control {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    width: 100%;
+    height: 41px;
+    display: block;
+    border: none;
+    color: #898989;
+    padding: 10px 0;
+    will-change: background-position;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 97%, #d2d2d2 97%);
+    background-position: -100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    font-size: 14px;
+    -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,.075);
+}
+
+/* ============ LABEL =========== */
+
+.rave-form label {
+    color:#898989;
+    font-weight: 300;
+    font-size: 10px;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    margin: 30px 0 30px;
+    display: inline-block
+}
+
+.rave-form .floating-label {
+    -webkit-transform: translateY(-18px);
+    transform: translateY(-18px);
+    position: absolute
+}
+
+.rave-form .label-active {
+    -webkit-transform: translateY(-38px);
+    transform: translateY(-38px);
+    font-size: 10px;
+    color: #000;
+}
+
+.rave-form .label-required:before {
+    content: '*';
+    color: red;
+    font-size: 15px;
+    position: absolute;
+    margin-left: -10px
+}
+
+
+/* ============ INPUT =========== */
+
+.rave-form input[type=email],
+.rave-form input[type=text],
+.rave-form input[type=datepicker],
+.rave-form input[type=textarea],
+.rave-form input[type=password],
+.rave-form input[type=number] {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 30px;
+    width: 100%;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #d2d2d2;
+    will-change: background-position;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #9c27b0 96%);
+    background-position: -1920px 0;
+    background-size:100%;
+    background-repeat: no-repeat;
+    color: #000;
+    font-size: 15.5px;
+}
+
+.rave-form input[type=email].input-active,
+.rave-form input[type=email]:focus,
+.rave-form input[type=text].input-active,
+.rave-form input[type=text]:focus,
+.rave-form input[type=datepicker].input-active,
+.rave-form input[type=datepicker]:focus,
+.rave-form input[type=textarea].input-active,
+.rave-form input[type=textarea]:focus,
+.rave-form input[type=password].input-active,
+.rave-form input[type=password]:focus,
+.rave-form input[type=number].input-active,
+.rave-form input[type=number]:focus {
+    background-position: 0 0;
+    box-shadow: none;
+    outline: 0;
+}
+
+.rave-form input[type=email].input-active,
+.rave-form input[type=email]:focus:after,
+.rave-form input[type=text].input-active,
+.rave-form input[type=text]:focus:after,
+.rave-form input[type=datepicker].input-active,
+.rave-form input[type=datepicker]:focus:after,
+.rave-form input[type=textarea].input-active,
+.rave-form input[type=textarea]:focus:after,
+.rave-form input[type=password].input-active,
+.rave-form input[type=password]:focus:after,
+.rave-form input[type=number].input-active,
+.rave-form input[type=number]:focus:after {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 30px;
+    width: 100%;
+    display: block;
+    border: none;
+    padding: 10px 0;
+    border-bottom: solid 1px #d2d2d2;
+    will-change: background-position;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #d2d2d2 96%);
+    background-position: -1920px 0;
+    background-size:100%;
+    background-repeat: no-repeat;
+    color: #000;
+    font-size: 14px;
+}
+
+.rave-form input[type=email]::-webkit-input-placeholder,
+.rave-form input[type=text]::-webkit-input-placeholder,
+.rave-form input[type=datepicker]::-webkit-input-placeholder,
+.rave-form input[type=textarea]::-webkit-input-placeholder,
+.rave-form input[type=password]::-webkit-input-placeholder,
+.rave-form input[type=number]::-webkit-input-placeholder {
+    transition: all .2s cubic-bezier(.64, .09, .08, 1);
+}
+
+.rave-form input[type=radio]:after,
+.rave-form input[type=radio]:before {
+    content: '';
+    position: absolute;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1)
+}
+
+.rave-form input[type=checkbox] {
+    position: relative;
+    cursor: pointer;
+    top: -2px;
+    margin-left: -1px;
+    margin: 5px 12px 5px 0px;
+}
+
+.rave-form input[type=checkbox]:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 1px solid #9c27b0;
+    border-radius: 3px;
+    background: #fff;
+    position: absolute;
+    top: -2px;
+    margin-left: -1px;
+}
+
+.rave-form input[type=checkbox]:after {
+    content: '✓';
+    color: #fff;
+    background: #9c27b0;
+    position: absolute;
+    top: -2px;
+    margin-left: -1px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #9c27b0;
+    border-radius: 3px;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.64, .09, .08, 1);
+    will-change: opacity
+}
+
+.rave-form input[type=checkbox]:checked:after {
+    opacity: 1
+}
+
+.rave-form input[type=radio] {
+    position: relative;
+    top: 2px;
+    left: 2px;
+    margin: 0 8px;
+    cursor: pointer
+}
+
+.rave-form input[type=radio]:before {
+    background-color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #9c27b0;
+    display: inline-block;
+    top: -5px;
+    left: -8px;
+    background-image: radial-gradient(circle, #9c27b0 60%, #fff 70%);
+    background-size: 0;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    will-change: background-size;
+    z-index: 2
+}
+
+.rave-form input[type=radio]:after {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%
+}
+
+.rave-form input[type=radio]:checked:before {
+    background-size: 14px 14px
+}
+
+
+/* FILE INPUT */
+
+.rave-form input[type=file] {
+    font-size: 5px;
+}
+
+.rave-form .file-input .btn input {
+    width: 0;
+    height: 0;
+}
+
+.rave-form .file-button {
+    background-color: #00d3ee;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
+}
+
+.rave-form .file-button:hover {
+    background-color: #af2cc5;
+    border: 1px solid #af2cc5;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+}
+
+
+/* ============ BUTTONS =========== */
+
+.rave-form .adam-button {
+    margin-top: 20px;
+    padding: 8px 14px;
+    float: right;
+    background: #9c27b0;
+     font-size: 14px;
+
+    border-radius: 3px;
+    color: #fff;
+    border: 1px solid #9c27b0;
+    font-weight: 300;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+}
+
+.rave-form .adam-button:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    background: #9c27b0;
+    border: 1px solid #9c27b0;
+}
+
+.rave-form .adam-button2 {
+    margin-top: 3px;
+    padding: 8px 14px;
+    float: right;
+    font-size: 14px;
+
+    background: #9c27b0;
+    border-radius: 3px;
+    color: #fff;
+    border: 1px solid #9c27b0;
+    font-weight: 300;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+}
+
+.rave-form .adam-button2:hover {
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    background: #9c27b0;
+    border: 1px solid #9c27b0;
+}
+
+.rave-form .clear-button {
+    position: absolute;
+    margin-top: -60px;
+    margin-left: calc(100% - 155px);
+    z-index: 2;
+    padding-bottom: 2px;
+    padding-right: .5px;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    border-radius: 30px;
+    font-size: 12px;
+    background: #452169;
+    color: red;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    transition: .3s ease-out
+}
+
+/* ============ ALERTS =========== */
+
+.rave-form .alert {
+    border: 0;
+    border-radius: 0;
+    position: relative;
+    padding: 20px 15px;
+    line-height: 20px;
+}
+
+.rave-form .alert b {
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.rave-form .alert,
+.rave-form .alert.alert-default {
+    background-color: white;
+    color: #555555;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(255, 255, 255, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 255, 255, 0.2);
+}
+
+.rave-form .alert a,
+.rave-form .alert .alert-link,
+.rave-form .alert.alert-default a,
+.rave-form .alert.alert-default .alert-link {
+    color: #555555;
+}
+
+.rave-form .alert.alert-inverse {
+    background-color: #2e2e2e;
+    color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(33, 33, 33, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(33, 33, 33, 0.2);
+}
+
+.rave-form .alert.alert-inverse a,
+.rave-form .alert.alert-inverse .alert-link {
+    color: #fff;
+}
+
+.rave-form .alert.alert-primary {
+    background-color: #af2cc5;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(156, 39, 176, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(156, 39, 176, 0.2);
+}
+
+.rave-form .alert.alert-primary a,
+.rave-form .alert.alert-primary .alert-link {
+    color: #ffffff;
+}
+
+.rave-form .alert.alert-success {
+    background-color: #5cb860;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(76, 175, 80, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(76, 175, 80, 0.2);
+}
+
+.rave-form .alert.alert-success a,
+.rave-form .alert.alert-success .alert-link {
+    color: #ffffff;
+}
+
+.rave-form .alert.alert-info {
+    background-color: #00d3ee;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
+}
+
+.rave-form .alert.alert-info a,
+.rave-form .alert.alert-info .alert-link {
+    color: #ffffff;
+}
+
+.rave-form .alert.alert-warning {
+    background-color: #ffa21a;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+}
+
+.rave-form .alert.alert-warning a,
+.rave-form .alert.alert-warning .alert-link {
+    color: #ffffff;
+}
+
+.rave-form .alert.alert-danger {
+    background-color: #f55a4e;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2);
+}
+
+.rave-form .alert.alert-danger a,
+.rave-form .alert.alert-danger .alert-link {
+    color: #ffffff;
+}
+
+.rave-form .alert.alert-rose {
+    background-color: #eb3573;
+    color: #ffffff;
+    border-radius: 3px;
+    box-shadow: 0 12px 20px -10px rgba(233, 30, 99, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(233, 30, 99, 0.2);
+}
+
+.rave-form .alert.alert-rose a,
+.rave-form .alert.alert-rose .alert-link {
+    color: #ffffff;
+}
+
+.rave-form .alert-info,
+.rave-form .alert-danger,
+.rave-form .alert-warning,
+.rave-form .alert-success {
+    color: #ffffff;
+}
+
+.rave-form .alert-default a,
+.rave-form .alert-default .alert-link {
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.rave-form .alert i[data-notify="icon"] {
+    font-size: 30px;
+    display: block;
+    left: 15px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+}
+
+.rave-form .alert span {
+    display: block;
+    max-width: 89%;
+}
+
+.rave-form .alert .alert-icon {
+    display: block;
+    float: left;
+    margin-right: 15px;
+}
+
+.rave-form .alert .alert-icon i {
+    margin-top: -7px;
+    top: 5px;
+    position: relative;
+}
+
+.rave-form .alert.alert-with-icon {
+    padding-left: 65px;
+}
+
+/* ============ ALERT BORDER =========== */
+
+/* Info - Blue */
+.rave-form .adam-blue {
+    background: #00d3ee;
+    border: 1px solid #00d3ee;
+    box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
+}
+
+.rave-form .adam-blue:hover {
+    background: #00d3ee;
+    border: 1px solid #00d3ee;
+}
+
+/* Success - Green */
+.rave-form .adam-green {
+    background: #5cb860;
+    border: 1px solid #5cb860;
+    box-shadow: 0 12px 20px -10px rgba(76, 175, 80, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(76, 175, 80, 0.2);
+}
+
+.rave-form .adam-green:hover {
+    background: #5cb860;
+    border: 1px solid #5cb860;
+}
+
+/* Danger - Red */
+.rave-form .adam-red {
+    background: #f55a4e;
+    border: 1px solid #f55a4e;
+    box-shadow: 0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2);
+}
+
+.rave-form .adam-red:hover {
+    border: 1px solid #f55a4e;
+    background: #f55a4e;
+}
+
+/* Warning - Orange */
+.rave-form .adam-orange {
+    background: #f0ad4e;
+    border: 1px solid #f0ad4e;
+    box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+}
+
+.rave-form .adam-orange:hover {
+    background: #f0ad4e;
+    border: 1px solid #f0ad4e;
+}
+
+/* ============ RATINGS =========== */
+
+.rave-form .rating {
+    position: relative;
+}
+
+.rave-form .rating .rating-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.rave-form .rating .rating-wrapper > input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    z-index: -1;
+}
+
+.rave-form .rating .rating-wrapper > label {
+    float: right;
+    padding-right: 2px;
+    padding-left: 2px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.rave-form .rating .rating-wrapper > label {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    line-height: 20px;
+}
+
+.rave-form .rating.star .rating-wrapper > label {
+    font-size: 32px;
+}
+
+.rave-form .rating.star .rating-wrapper > input:checked ~ label {
+    color: #9c27b0;
+}
+
+.rave-form .rating.star .rating-wrapper > input:hover ~ label {
+    color: #f55a4e;
+}
+
+.rave-form .rating .control-label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+/* ============ TAB PANEL =========== */
+.rave-form .nav-tabs {
+    position: relative;
+    margin: 40px auto;
+    margin-bottom: 0;
+    box-sizing: border-box;
+
+}
+
+.rave-form p.narrow{
+    width: 60%;
+    margin: 10px auto;
+}
+
+.rave-form .liner{
+    height: 2px;
+    background: #ddd;
+    position: absolute;
+    width: 80%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    top: 50%;
+    z-index: 1;
+}
+
+.rave-form .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    color: #555555;
+    cursor: default;
+    border: 0;
+    border-bottom-color: transparent;
+}
+
+.rave-form span.round-tabs{
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    display: inline-block;
+    border-radius: 100px;
+    background: white;
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    text-align: center;
+    font-size: 25px;
+}
+
+.rave-form span.round-tabs.one{
+    color: #00d3ee;border: 2px solid #ddd;
+}
+
+.rave-form li.active span.round-tabs.one{
+    background: #fff !important;
+    border: 2px solid #00d3ee;
+    color: #00d3ee;
+    box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
+}
+
+.rave-form span.round-tabs.two{
+    color: #5cb860;border: 2px solid #ddd;
+}
+
+.rave-form li.active span.round-tabs.two{
+    background: #fff !important;
+    border: 2px solid #5cb860;
+    color: #5cb860;
+    box-shadow: 0 12px 20px -10px rgba(76, 175, 80, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(76, 175, 80, 0.2);
+}
+
+.rave-form span.round-tabs.three{
+    color: #f0ad4e;border: 2px solid #ddd;
+}
+
+.rave-form li.active span.round-tabs.three{
+    background: #fff !important;
+    border: 2px solid #f0ad4e;
+    color: #f0ad4e;
+    box-shadow: 0 12px 20px -10px rgba(255, 152, 0, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(255, 152, 0, 0.2);
+}
+
+.rave-form span.round-tabs.four{
+    color: #f55a4e;border: 2px solid #ddd;
+}
+
+.rave-form li.active span.round-tabs.four{
+    background: #fff !important;
+    border: 2px solid #f55a4e;
+    color: #f55a4e;
+    box-shadow: 0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2);
+}
+
+.rave-form .nav-tabs > li.active > a span.round-tabs{
+    background: #fafafa;
+}
+.rave-form .nav-tabs > li {
+    width: 25%;
+}
+.rave-form li.active:before {
+    content: " ";
+    position: absolute;
+    left: 45%;
+    opacity:0;
+    margin: 0 auto;
+    bottom: -2px;
+    border: 10px solid transparent;
+    border-bottom-color: #fff;
+    z-index: 1;
+    transition:0.2s ease-in-out;
+}
+.rave-form .nav-tabs > li:after {
+    content: " ";
+    position: absolute;
+    left: 45%;
+   opacity:0;
+    margin: 0 auto;
+    bottom: 0px;
+    border: 5px solid transparent;
+    border-bottom-color: #ddd;
+    transition:0.1s ease-in-out;
+    
+}
+.rave-form .nav-tabs > li.active:after {
+    content: " ";
+    position: absolute;
+    left: 45%;
+   opacity:1;
+    margin: 0 auto;
+    bottom: 0px;
+    border: 10px solid transparent;
+    border-bottom-color: #ddd;
+    
+}
+.rave-form .nav-tabs > li a{
+   width: 70px;
+   height: 70px;
+   margin: 20px auto;
+   border-radius: 100%;
+   padding: 0;
+}
+
+.rave-form .nav-tabs > li a:hover{
+    background: transparent;
+}
+
+.rave-form .tab-content{
+}
+.tab-pane{
+   position: relative;
+   padding-top: 20px;
+}
+.rave-form .tab-content .head{
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 25px;
+    text-transform: uppercase;
+    padding-bottom: 10px;
+}
+.rave-form .btn-outline-rounded{
+    padding: 10px 40px;
+    margin: 20px 0;
+    border: 2px solid transparent;
+    border-radius: 25px;
+}
+
+.rave-form .btn.green{
+    background-color:#5cb85c;
+    color: #ffffff;
+}
+
+@media( max-width : 585px ){
+    
+    .rave-form .board {
+width: 90%;
+height:auto !important;
+}
+    .rave-form span.round-tabs {
+        font-size:16px;
+width: 50px;
+height: 50px;
+line-height: 50px;
+    }
+    .rave-form .tab-content .head{
+        font-size:20px;
+        }
+    .rave-form .nav-tabs > li a {
+width: 50px;
+height: 50px;
+line-height:50px;
+}
+
+.rave-form .nav-tabs > li.active:after {
+content: " ";
+position: absolute;
+left: 35%;
+}
+
+.rave-form .btn-outline-rounded {
+    padding:12px 20px;
+    }
+}
+
+/**/
+
+.rave-form p {
+    font-size: 14px;
+    font-weight: 300;
+    color: #898989;
+    line-height: 24px;
+}
+
+.rave-form b, strong {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #333;
+}
+
+.rave-form .title {
+    font-size: 24px;
+    line-height: 32px;
+    color: #fff;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
+.rave-form .title-description {
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.rave-form .title-description a {
+    color: #FFFFFF;
+}
+.rave-form-spinner-container{ height:100%;width:100%;position:fixed;top:0;left:0;background-color:rgba(0,0,0,.75); z-index:999}
+.rave-form-spinner{width:40px;height:40px;margin-top:-20px; margin-left:-20px; position:fixed; top:50%; left:50%; background-color:#fff;border-radius:100%;-webkit-animation:sk-scaleout 1s infinite ease-in-out;animation:sk-scaleout 1s infinite ease-in-out}@-webkit-keyframes sk-scaleout{0%{-webkit-transform:scale(0)}100%{-webkit-transform:scale(1);opacity:0}}@keyframes sk-scaleout{0%{-webkit-transform:scale(0);transform:scale(0)}100%{-webkit-transform:scale(1);transform:scale(1);opacity:0}}
+
+
+.form-control:focus{
+    box-shadow: none;
+}
+.dropdown-menu{
+    box-shadow:4px 4px 0px rgba(0, 0, 0, 0.15);
+}
+.datepicker {
+  top: 0;
+  left: 0;
+  padding: 4px;
+  margin-top: 1px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  /*.dow {
+    border-top: 1px solid #ddd !important;
+  }*/
+
+}
+.datepicker:before {
+  content: '';
+  display: inline-block;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #ccc;
+  border-bottom-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: -7px;
+  left: 6px;
+}
+.datepicker:after {
+  content: '';
+  display: inline-block;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #ffffff;
+  position: absolute;
+  top: -6px;
+  left: 7px;
+}
+.datepicker > div {
+  display: none;
+}
+.datepicker table {
+  width: 100%;
+  margin: 0;
+}
+
+.datepicker th {
+  text-align: center;
+  font-weight: 300;
+
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.datepicker td{
+  border-top: 1px solid #dddddd;
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+}
+.datepicker tr:first-child td{
+    border-top: 0;
+}
+.datepicker thead tr:first-child{
+    height: 30px;
+}
+.datepicker td p{
+    border-radius: 50%;
+    height: 27px;
+    line-height: 27px;
+    margin: 3px 0 8px;
+    width: 27px;
+}
+.datepicker th{
+    font-size: 10px;
+}
+.datepicker td.day:hover p{
+  background: #E5E5E5;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+.datepicker td.day.disabled {
+  color: #eeeeee;
+}
+.datepicker td.old,
+.datepicker td.new {
+/*   color: #999999; */
+    color: #DDDDDD;
+    border-top: 0;
+}
+.datepicker td.active p,
+.datepicker td.active:hover p{
+  color: #ffffff;
+  background-color: #FF3A2D;
+}
+.datepicker td.active.blue p,
+.datepicker td.active.blue:hover p{
+  background-color: #007aff;  
+}
+.datepicker td.active.green p,
+.datepicker td.active.green:hover p{
+  background-color: #4cd964;  
+}
+.datepicker td.active.black p,
+.datepicker td.active.black:hover p{
+  background-color: #4a4a4a;  
+}
+.datepicker td.active.red p,
+.datepicker td.active.red:hover p{
+  background-color: #FF3A2D;  
+}
+
+.datepicker td.active:hover,
+.datepicker td.active:hover:hover,
+.datepicker td.active:focus,
+.datepicker td.active:hover:focus,
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active,
+.datepicker td.active.disabled,
+.datepicker td.active:hover.disabled,
+.datepicker td.active[disabled],
+.datepicker td.active:hover[disabled] {
+  color: #ffffff;
+  
+}
+.datepicker td.active:active,
+.datepicker td.active:hover:active,
+.datepicker td.active.active,
+.datepicker td.active:hover.active {
+  background-color: #003399 \9;
+}
+.datepicker td span {
+  display: block;
+  width: 47px;
+  height: 54px;
+  line-height: 54px;
+  float: left;
+  margin: 2px;
+  cursor: pointer;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+.datepicker td span:hover {
+  background: #eeeeee;
+}
+.datepicker td span.active {
+  color: #ffffff;
+  background-color: #FF3A2D;
+
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+.datepicker td span.active:hover,
+.datepicker td span.active:focus,
+.datepicker td span.active:active,
+.datepicker td span.active.active,
+.datepicker td span.active.disabled,
+.datepicker td span.active[disabled] {
+  color: #ffffff;
+  background-color: #FF3A2D;
+}
+.datepicker td span.active:active,
+.datepicker td span.active.active {
+  background-color: #003399 \9;
+}
+.datepicker td span.old {
+  color: #999999;
+}
+.datepicker th.switch {
+  font-size: 16px;
+  width: 145px;
+ 
+}
+
+.datepicker.red th.switch{
+    color: #ff3b30;
+}
+.datepicker th.next,
+.datepicker th.prev {
+  font-size: 33px;
+}
+
+.datepicker th.dow{
+    font-weight: 400;
+    padding: 5px 0;
+}
+
+.datepicker thead tr:first-child th {
+  cursor: pointer;
+}
+.datepicker thead tr:first-child th:hover {
+  background: #eeeeee;
+}
+.input-append.date .add-on i,
+.input-prepend.date .add-on i {
+  display: block;
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.table-condensed > thead > tr > th, .table-condensed > tbody > tr > th, .table-condensed > tfoot > tr > th, .table-condensed > thead > tr > td, .table-condensed > tbody > tr > td, .table-condensed > tfoot > tr > td {
+    padding: 0;
+}
+.datepicker-months .table-condensed > tbody > tr > td, .datepicker-years .table-condensed > tbody > tr > td{
+    width: 210px;
+}
+.table-condensed p{
+    padding: 0;
+    line-height: 32px;
+}
