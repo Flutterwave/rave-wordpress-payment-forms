@@ -64,23 +64,11 @@ class Kkd_Pff_Rave_Admin {
 				            <th scope="row">Live Secret Key</th>
 					        <td><input type="text" name="rave_live_secret_key" value="<?php echo esc_attr( get_option('rave_live_secret_key') ); ?>" /></td>
 				        </tr>
-				        <tr valign="top">
+				       <!--  <tr valign="top">
 						   	<th scope="row" colspan="2" ><h3>Monthly recurring API Keys(only monthly rave checkout api keys) </h4></th>
 					        
-					    </tr>
+					    </tr> -->
         				
-        				<tr valign="top">
-						   	<th scope="row">Sandbox Public Key</th>
-					        <td><input type="text" name="rave_recurring_sandbox_public_key" value="<?php echo esc_attr( get_option('rave_recurring_sandbox_public_key') ); ?>" /></td>
-					        <th scope="row">Sandbox Secret Key</th>
-					        <td><input type="text" name="rave_recurring_sandbox_secret_key" value="<?php echo esc_attr( get_option('rave_recurring_sandbox_secret_key') ); ?>" /></td>
-					    </tr>
-						<tr valign="top">
-					        <th scope="row">Live Public Key</th>
-					        <td><input type="text" name="rave_recurring_live_public_key" value="<?php echo esc_attr( get_option('rave_recurring_live_public_key') ); ?>" /></td>
-				            <th scope="row">Live Secret Key</th>
-					        <td><input type="text" name="rave_recurring_live_secret_key" value="<?php echo esc_attr( get_option('rave_recurring_live_secret_key') ); ?>" /></td>
-				        </tr>
 				    </table>
 
 			    <?php submit_button(); ?>
@@ -271,7 +259,7 @@ class Kkd_Pff_Rave_Admin {
 		add_action( 'add_meta_boxes', 'kkd_pff_rave_editor_add_extra_metaboxes' );
 	  function kkd_pff_rave_editor_add_extra_metaboxes() {
 
-	  		if ($_GET['action'] == 'edit') {
+	  		if (isset($_GET['action']) && $_GET['action'] == 'edit') {
 	  			add_meta_box( 'kkd_pff_rave_editor_help_shortcode', 'Paste shortcode on preferred page', 'kkd_pff_rave_editor_shortcode_details', 'rave_form', 'custom-metabox-holder');
 			}
 			add_meta_box( 'kkd_pff_rave_editor_help_data', 'Help Section', 'kkd_pff_rave_editor_help_metabox_details', 'rave_form', 'custom-metabox-holder');
@@ -329,6 +317,9 @@ class Kkd_Pff_Rave_Admin {
 							<option value="GHS" '.kkd_pff_rave_check_selected('GHS',$currency).'>GHS</option>
 							<option value="KES" '.kkd_pff_rave_check_selected('KES',$currency).'>KES</option>
 							<option value="NGN" '.kkd_pff_rave_check_selected('NGN',$currency).'>NGN</option>
+							<option value="NGN" '.kkd_pff_rave_check_selected('USD',$currency).'>USD</option>
+							<option value="NGN" '.kkd_pff_rave_check_selected('GBP',$currency).'>GBP</option>
+							<option value="open" '.kkd_pff_rave_check_selected('open',$currency).'>All Currencies</option>
 						</select>';
 			echo '<p>Amount to be paid(Set 0 for customer input):</p>';
 		  	echo '<input type="number" name="_amount" value="' . $amount  . '" class="widefat pf-number" />';
@@ -346,11 +337,11 @@ class Kkd_Pff_Rave_Admin {
 		  	}
 		  	echo '<p>Pay button Description:</p>';
 		  	echo '<input type="text" name="_paybtn" value="' . $paybtn  . '" class="widefat" />';
-				echo '<p>Transaction Charges:</p>';
-				echo '<select class="form-control" name="_txncharge" id="parent_id" style="width:100%;">
-								<option value="merchant"'.kkd_pff_rave_check_selected('merchant',$txncharge).'>Merchant Pays(Include in fee)</option>
-								<option value="customer" '.kkd_pff_rave_check_selected('customer',$txncharge).'>Client Pays(Calculated Rave Local Fee added) </option>
-							</select>';
+				// echo '<p>Transaction Charges:</p>';
+				// echo '<select class="form-control" name="_txncharge" id="parent_id" style="width:100%;">
+				// 				<option value="merchant"'.kkd_pff_rave_check_selected('merchant',$txncharge).'>Merchant Pays(Include in fee)</option>
+				// 				<option value="customer" '.kkd_pff_rave_check_selected('customer',$txncharge).'>Client Pays(Calculated Rave Local Fee added) </option>
+				// 			</select>';
 				echo '<p>User logged In:</p>';
 				echo '<select class="form-control" name="_loggedin" id="parent_id" style="width:100%;">
 								<option value="no" '.kkd_pff_rave_check_selected('no',$loggedin).'>User must not be logged in</option>
@@ -420,8 +411,11 @@ class Kkd_Pff_Rave_Admin {
 			echo '<select class="form-control" name="_recur" style="width:100%;">
 							<option value="no" '.kkd_pff_rave_check_selected('no',$recur).'>None</option>
 							<option value="optional" '.kkd_pff_rave_check_selected('optional',$recur).'>Optional Recurring</option>
-							<option value="fixed" '.kkd_pff_rave_check_selected('fixed',$recur).'>Fixed amount </option>
+							<option value="fixed" '.kkd_pff_rave_check_selected('fixed',$recur).'>Fixed amount(with plan ID) </option>
 						</select>';
+			echo '<p>Rave Recur Plan Id:</p>';
+	  	echo '<input type="text" name="_recurplan" value="' . $recurplan  . '" class="widefat" />
+				<small>Plan amount must match amount on extra form description.</small>';
 
 	}
 	function kkd_pff_rave_editor_add_quantity_data() {
@@ -493,7 +487,7 @@ class Kkd_Pff_Rave_Admin {
 			$form_meta['_paybtn'] = $_POST['_paybtn'];
 			$form_meta['_currency'] = $_POST['_currency'];
 			$form_meta['_successmsg'] = $_POST['_successmsg'];
-			$form_meta['_txncharge'] = $_POST['_txncharge'];
+			$form_meta['_txncharge'] = 'merchant';
 			$form_meta['_loggedin'] = $_POST['_loggedin'];
 			$form_meta['_filelimit'] = $_POST['_filelimit'];
 			$form_meta['_redirect'] = $_POST['_redirect'];
@@ -504,7 +498,7 @@ class Kkd_Pff_Rave_Admin {
 			$form_meta['_sendreceipt'] = $_POST['_sendreceipt'];
 			///
 			$form_meta['_recur'] = $_POST['_recur'];
-			// $form_meta['_recurplan'] = $_POST['_recurplan'];
+			$form_meta['_recurplan'] = $_POST['_recurplan'];
 			$form_meta['_usequantity'] = $_POST['_usequantity'];
 			$form_meta['_quantity'] = $_POST['_quantity'];
 

@@ -212,7 +212,62 @@
 							      onclose: function() {},
 							      callback: function(response) {
 							        var flw_ref = response.tx.flwRef;
-							        console.log("This is the response returned after a charge", response);
+							        // console.log("This is the response returned after a charge", response);
+							        if ( response.tx.chargeResponseCode == "00" || response.tx.chargeResponseCode == "0" ) {
+							        	popup.close();
+							  			$('#rave-form-loader').show();
+											$.post($form.attr('action'), {
+												'action':'kkd_pff_rave_confirm_payment',
+												'reference':response.tx.txRef,
+												'quantity':quantity,
+												'flwReference':flw_ref,
+
+											}, function(newdata) {
+				 									data = JSON.parse(newdata);
+				 									if (data.result == 'success2'){
+								                       window.location.href = data.link;
+								                    }
+				 									if (data.result == 'success'){
+				 										$('.rave-form')[0].reset();
+				 										$('html,body').animate({ scrollTop: $('.rave-form').offset().top - 110 }, 500);
+
+				 										// self.before('<pre>'+data.message+'</pre>');
+				 										$('.rave-form-header').after('<div class="alert alert-success"><button type="button" aria-hidden="true" class="close">×</button> <span>'+data.message+'</span></div>')
+				 										$(this).find("input, select, textarea").each(function() {
+				 												$(this).css({ "border-color":"#d1d1d1","background-color":"#fff" });
+				 										});
+														$(".rave-txncharge").hide().html("NGN0").show().digits();
+														$(".rave-txntotal").hide().html("NGN0").show().digits();
+
+				 										$('#rave-form-loader').hide();
+													}else{
+				 										// self.before('<pre>'+data.message+'</pre>');
+				 										$('.rave-form-header').after('<div class="alert alert-danger"><button type="button" aria-hidden="true" class="close">×</button> <span>'+data.message+'</span></div>')
+				 										$('#rave-form-loader').hide();
+				 									}
+				 							});
+							        }else{
+							        	$('#rave-form-loader').show();
+										
+							          	alert(response.respmsg);
+							        }
+							      }
+							    });
+							}else{
+								var popup = getpaidSetup({
+							      PBFPubKey: data.key,
+							      customer_email: data.email,
+							      customer_firstname: firstName,
+							      customer_lastname: lastName,
+							      amount: data.total/100,
+							      currency: data.currency,
+							      payment_plan: data.plan,
+							      txref : data.reference,
+							      country : data.country,
+							      onclose: function() {},
+							      callback: function(response) {
+							        var flw_ref = response.tx.flwRef;
+							        // console.log("This is the response returned after a charge", response);
 							        if ( response.tx.chargeResponseCode == "00" || response.tx.chargeResponseCode == "0" ) {
 							        	popup.close();
 							  			$('#rave-form-loader').show();

@@ -1,15 +1,5 @@
 <?php
 
-define('KKD_PFF_RAVE_PERCENTAGE', 0.015);
-define('KKD_PFF_RAVE_CROSSOVER_TOTAL', 250000);
-define('KKD_PFF_RAVE_ADDITIONAL_CHARGE', 10000);
-define('KKD_PFF_RAVE_LOCAL_CAP', 200000);
-
-define('KKD_PFF_RAVE_CHARGE_DIVIDER', floatval(1-KKD_PFF_RAVE_PERCENTAGE));
-define('KKD_PFF_RAVE_CROSSOVER_AMOUNT', intval((KKD_PFF_RAVE_CROSSOVER_TOTAL*KKD_PFF_RAVE_CHARGE_DIVIDER)-KKD_PFF_RAVE_ADDITIONAL_CHARGE));
-define('KKD_PFF_RAVE_FLATLINE_AMOUNT_PLUS_CHARGE', intval((KKD_PFF_RAVE_LOCAL_CAP-KKD_PFF_RAVE_ADDITIONAL_CHARGE)/KKD_PFF_RAVE_PERCENTAGE));
-define('KKD_PFF_RAVE_FLATLINE_AMOUNT', KKD_PFF_RAVE_FLATLINE_AMOUNT_PLUS_CHARGE - KKD_PFF_RAVE_LOCAL_CAP);
-
 require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 require_once(ABSPATH . "wp-admin" . '/includes/file.php');
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
@@ -31,12 +21,9 @@ class Kkd_Pff_Rave_Public {
 		$mode =  esc_attr( get_option('rave_mode'));
 		$this->mode = $mode;
 		if ($mode == 'sandbox') {
-			$this->base_url = 'http://flw-pms-dev.eu-west-1.elasticbeanstalk.com';
+			$this->base_url = 'https://ravesandboxapi.flutterwave.com';
 			$this->public_key = esc_attr( get_option('rave_sandbox_public_key') );
 			$this->secret_key = esc_attr( get_option('rave_sandbox_secret_key') );
-
-			$this->recurring_public_key = esc_attr( get_option('rave_recurring_sandbox_public_key') );
-			$this->recurring_secret_key = esc_attr( get_option('rave_recurring_sandbox_secret_key') );
 
      	}else{
 
@@ -44,9 +31,7 @@ class Kkd_Pff_Rave_Public {
      		$this->public_key = esc_attr( get_option('rave_live_public_key') );
 			$this->secret_key = esc_attr( get_option('rave_live_secret_key') );
 
-			$this->recurring_public_key = esc_attr( get_option('rave_recurring_live_public_key') );
-			$this->recurring_secret_key = esc_attr( get_option('rave_recurring_live_secret_key') );
-
+			
      	}
 
 	}
@@ -66,29 +51,14 @@ class Kkd_Pff_Rave_Public {
 		wp_enqueue_script( 'Rave_FJS', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/frontend.js', array( 'jquery' ), $this->version, true ,true  );
 		
 		wp_enqueue_script( 'rave_frontend', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/frontend_form.js', array( 'jquery' ), $this->version, true ,true  );
-		wp_localize_script( 'rave_frontend', 'settings', array('key'=> $this->public_key,'recurring_key'=> $this->recurring_public_key), $this->version,true, true );
+		wp_localize_script( 'rave_frontend', 'settings', array('key'=> $this->public_key), $this->version,true, true );
 
 	}
 
 }
 
 
-function kkd_pff_rave_add_rave_charge($amount)
-{
-    $charge = 0;
-	$amount = intval($amount);
-    if ($amount <= 2500) {
-    	$charge = floatval($amount*KKD_PFF_RAVE_PERCENTAGE);
-    }else{
-    	$charge = floatval($amount*KKD_PFF_RAVE_PERCENTAGE)+100;
 
-    }
-    if ($charge > 2000) {
-    	$charge = 2000;
-    }
-    $amount += $charge;
-    return $amount;
-}
 
 add_filter ("wp_mail_content_type", "kkd_pff_rave_mail_content_type");
 function kkd_pff_rave_mail_content_type() {
@@ -498,27 +468,48 @@ function kkd_pff_rave_send_receipt_owner($id,$currency,$amount,$name,$email,$cod
 	wp_mail($admin_email, $email_subject, $message,$headers);
 
 }
-function kkd_pff_rave_fetch_plan($code){
-	$mode =  esc_attr( get_option('mode') );
-	if ($mode == 'test') {
-		$key = esc_attr( get_option('tsk') );
-	}else{
-		$key = esc_attr( get_option('lsk') );
-	}
-	$rave_url = 'https://api.rave.co/plan/' . $code;
-	$headers = array(
-		'Authorization' => 'Bearer ' . $key
-	);
-	$args = array(
-		'headers'	=> $headers,
-		'timeout'	=> 60
-	);
-	$request = wp_remote_get( $rave_url, $args );
-	if( ! is_wp_error( $request )) {
-		$rave_response = json_decode( wp_remote_retrieve_body( $request ) );
+// function kkd_pff_rave_fetch_plan($code){
+// 	$mode =  esc_attr( get_option('mode') );
+// 	if ($mode == 'test') {
+// 		$key = esc_attr( get_option('tsk') );
+// 	}else{
+// 		$key = esc_attr( get_option('lsk') );
+// 	}
+// 	$rave_url = 'https://api.rave.co/plan/' . $code;
+// 	$headers = array(
+// 		'Authorization' => 'Bearer ' . $key
+// 	);
+// 	$args = array(
+// 		'headers'	=> $headers,
+// 		'timeout'	=> 60
+// 	);
+// 	$request = wp_remote_get( $rave_url, $args );
+// 	if( ! is_wp_error( $request )) {
+// 		$rave_response = json_decode( wp_remote_retrieve_body( $request ) );
 
+// 	}
+// 	return $rave_response;
+// }
+function kkd_pff_rave_fetch_plan( $id) {
+ 
+	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+	
+	$secret_key = $rave->secret_key;
+	
+  	$url = $rave->base_url . '/v2/gpx/paymentplans/query?seckey='.$secret_key.'&id='.$id;
+  	$args = array(
+	    'timeout'	=> 60
+  	);
+
+	$response = wp_remote_get( $url, $args );
+	$result = wp_remote_retrieve_response_code( $response );
+
+	if( $result === 200 ){
+	    return json_decode( wp_remote_retrieve_body( $response ));
 	}
-	return $rave_response;
+
+  return $result;
+
 }
 function kkd_pff_rave_form_shortcode($atts) {
     ob_start();
@@ -571,9 +562,23 @@ function kkd_pff_rave_form_shortcode($atts) {
 		    	// echo "</pre>";
 		    	// die();
 		    }
-			$showbtn = true;
+		    $showbtn = true;
 			$planerrorcode = 'Input Correct Recurring Plan Code';
-			 
+			  if ($recur == 'fixed') {
+					if ($recurplan == '' || $recurplan == null) {
+						$showbtn = false;
+					}else{
+						$plan =	kkd_pff_rave_fetch_plan($recurplan);
+						if ($plan->data->page_info->total == 1) {
+
+							$planamount = $plan->data->paymentplans[0]->amount;
+							
+						}else{
+							$showbtn = false;
+						}
+					}
+
+			  }
 			 if ((($user_id != 0) && ($loggedin == 'yes')) || $loggedin == 'no') {
 			 	if ($hidetitle != 1) {
 			 // echo "<h1 id='pf-form".$id."'>".$obj->post_title."</h1>";
@@ -623,7 +628,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 					}
 					if ($recur == 'fixed') {
 						 if ($showbtn) {
-							 echo '<input type="text" name="rave-amount" value="'.$amount.'" id="rave-amount" readonly required/>';
+							 echo '<input type="text" name="rave-amount" value="'.$planamount.'" id="rave-amount" readonly style="margin-bottom: 5px;" required/>';
 							 
 
 		 				 }else{
@@ -663,7 +668,19 @@ function kkd_pff_rave_form_shortcode($atts) {
 			 	if ($txncharge != 'merchant' && $recur != 'plan') {
 					echo '<small>Transaction Charge: <b class="rave-txncharge"></b>, Total:<b  class="rave-txntotal"></b></small>';
 				}
+				if($recur == 'fixed'){
+					if ($showbtn) {
+						
+						echo '<input type="hidden" name="pf-plancode" value="' . $recurplan. '" />';
+						echo '<label class="label" style="margin:0;font-size:13px;font-weight:600;line-height: 10px;">'.$plan->data->paymentplans[0]->name.' '.$plan->data->paymentplans[0]->interval. ' recuring payment - '.$plan->data->paymentplans[0]->currency.' '.number_format($planamount).'</label>
+							';
+					}else{
+						echo '<div class="row">
+									 <label class="label" style="font-size:18px;font-weight:600;line-height: 20px;">'.$planerrorcode.'</label>
+								 </div>';
+					}
 
+				}
 			echo '</div>
 			 </div>';
 			 if ($minimum == 0 && $recur == 'no' && $usequantity == 'yes' && ($usevariableamount == 1 || $amount != 0)) {
@@ -690,23 +707,17 @@ function kkd_pff_rave_form_shortcode($atts) {
 	 					 <label class="label">Recuring Payment</label>
 	 				 	 <select class="form-control" name="rave-interval" >
 	 						 <option value="no">None</option>
+	 						 <option value="hourly">Hourly</option>
+	 						 <option value="daily">Daily</option>
+	 						 <option value="every 2 days">Every 2 days</option>
+	 						 <option value="weekly">Weekly</option>
 	 						 <option value="monthly">Monthly</option>
+	 						 <option value="quarterly">Quarterly</option>
+	 						 <option value="yearly">Yearly</option>
 	 					 </select>
 	 					 <i></i>
 	 				 </div>
 	 			 </div>';
-			}elseif($recur == 'plan'){
-				if ($showbtn) {
-					echo '<input type="hidden" name="pf-plancode" value="' . $recurplan. '" />';
-					echo '<div class="row">
-							<label class="label" style="font-size:18px;font-weight:600;line-height: 20px;">'.$plan->data->name.' '.$plan->data->interval. ' recuring payment - '.$plan->data->currency.' '.number_format($planamount).'</label>
-						</div>';
-				}else{
-					echo '<div class="row">
-								 <label class="label" style="font-size:18px;font-weight:600;line-height: 20px;">'.$planerrorcode.'</label>
-							 </div>';
-				}
-
 			}
 
 
@@ -1062,9 +1073,6 @@ function kkd_pff_rave_submit_action() {
 		
 	
 	
-	if ($txncharge == 'customer') {
-		$amount = kkd_pff_rave_add_rave_charge($amount);
-	}
 	$maxFileSize = $filelimit * 1024 * 1024;
 
 	if(!empty($_FILES)){
@@ -1097,18 +1105,66 @@ function kkd_pff_rave_submit_action() {
 	}
 	$plancode = 'none';
 	$interval = $_POST['rave-interval'];
+	if($recur != 'no'){
+		if ($recur == 'optional') {
+			$interval = $_POST['rave-interval'];
+			if ($interval != 'no') {
+				unset($metadata['rave-interval']);
+					
+					
+					$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+	
+					$secret_key = $rave->secret_key;
+
+					$url = $rave->base_url . '/v2/gpx/paymentplans/create';
+					$body = array(
+						'name' => $currency.number_format($originalamount).' ['.$currency.number_format($amount).'] - '.$interval,
+						'amount'=> $amount,
+						'intervals'	=> $interval,
+						'seckey' => $secret_key
+					);
+					$headers = array(
+						'Content-Type'	=> 'application/json',
+					);
+					$args = array(
+						'headers'	=> $headers,
+						'body'		=> json_encode( $body ),
+						'timeout'	=> 60
+					);
+
+					$request = wp_remote_post( $url, $args );
+					if( ! is_wp_error( $request )) {
+						$paystack_response = json_decode(wp_remote_retrieve_body($request));
+						$plancode	= $paystack_response->data->id;
+						$fixedmetadata[] =  array(
+							'display_name' => 'Plan Interval',
+							'variable_name' => 'Plan Interval',
+							'type' => 'text',
+							'value' => $paystack_response->data->interval
+						);
+
+					}
+						// }
+
+					// }
+
+				}
+		}else{
+			//Use Plan Code
+			$plancode = $_POST['pf-plancode'];
+			unset($metadata['pf-plancode']);
+		}
+	}
+	
 
 	$is_recurring = 0;
 	if(($recur == 'optional' && $interval != 'no') || ($recur == 'fixed')){
 		$is_recurring = 1;
 	}
 	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
-	if($is_recurring == 1){
-		$public_key = $rave->recurring_public_key;
-	}else{
-		$public_key = $rave->public_key;
+	$public_key = $rave->public_key;
 
-	}
+	
 
 	$insert =  array(
     	'post_id' => strip_tags($_POST["rave-form-id"], ""),
@@ -1230,16 +1286,12 @@ function kkd_pff_rave_meta_as_custom_fields($metadata){
 
 add_action( 'wp_ajax_kkd_pff_rave_confirm_payment', 'kkd_pff_rave_confirm_payment' );
 add_action( 'wp_ajax_nopriv_kkd_pff_rave_confirm_payment', 'kkd_pff_rave_confirm_payment' );
-function getTransactionDetails( $flwReference, $is_recurring) {
+function getTransactionDetails( $flwReference) {
  
 	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
 	
-	if($is_recurring == 1){
-		$secret_key = $rave->recurring_secret_key;
-	}else{
-		$secret_key = $rave->secret_key;
-
-	}
+	$secret_key = $rave->secret_key;
+	
   	$url = $rave->base_url . '/flwv3-pug/getpaidx/api/verify';
   	$args = array(
 	    'body' => array(
@@ -1259,6 +1311,7 @@ function getTransactionDetails( $flwReference, $is_recurring) {
   return $result;
 
 }
+
 function kkd_pff_rave_confirm_payment() {
   if (trim($_POST['reference']) == '' || trim($_POST['flwReference']) == '') {
     $response['error'] = true;
@@ -1318,13 +1371,7 @@ function kkd_pff_rave_confirm_payment() {
 						$unitamount = (int)str_replace(' ', '', $amount);
 						$oamount = $quantity*$unitamount;
 					}
-					if ($txncharge == 'customer') {
-
-						if ($minimum == 0 && $amount != 0) {
-							$oamount = kkd_pff_rave_add_rave_charge($oamount);
-							
-						}
-					}
+					
 
 					if( $oamount !=  $amount_paid ) {
 						$message = "Invalid amount Paid. Amount required is ".$currency."<b>".number_format($oamount)."</b>";
@@ -1551,9 +1598,6 @@ function kkd_pff_rave_rconfirm_payment() {
 								}
 
 
-								if ($txncharge == 'customer') {
-									$amount = kkd_pff_rave_add_rave_charge($amount);
-								}
 								if( $amount !=  $amount_paid ) {
 									$message = "Invalid amount Paid. Amount required is ".$currency."<b>".number_format($amount)."</b>";
 									$result = "failed";
