@@ -1120,7 +1120,7 @@ function kkd_pff_rave_submit_action() {
 					$body = array(
 						'name' => $currency.number_format($originalamount).' ['.$currency.number_format($amount).'] - '.$interval,
 						'amount'=> $amount,
-						'intervals'	=> $interval,
+						'interval'	=> $interval,
 						'seckey' => $secret_key
 					);
 					$headers = array(
