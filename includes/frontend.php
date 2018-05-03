@@ -611,13 +611,33 @@ function kkd_pff_rave_form_shortcode($atts) {
 			echo' required>
 				 </div>
 			 </div>';
-			 echo '<div class="row">
+			 echo '<div class="row">';
+
+				if ($currency == 'open') {
+					echo '<div class="col-md-12">
+		 					 <label class="label">Currency</label>
+		 				 	 <select class="form-control" name="rave-currency" required >
+		 				 	 		<option value="NGN">NGN</option>
+		 				 	 		<option value="KES">KES</option>
+		 				 	 		<option value="GHS">GHS</option>
+		 				 	 		<option value="USD">USD</option>
+		 				 	 		<option value="GBP">GBP</option>
+		 				 	 		<option value="GHS">GHS</option>
+		 					 </select>
+		 					 <br><br>
+		 				 </div><br>';
+				}
 				 
-				 <div class="col-md-12"><label class="label">Amount ('.$currency;
-				 if ($minimum == 0 && $amount != 0 && $usequantity == 'yes') {
-				 	echo ' '.number_format($amount);
-				 }
+				 
+				echo '<div class="col-md-12"><label class="label">Amount ';
+
+				if($currency != 'open'){
+				echo '('.$currency;
+					 if ($minimum == 0 && $amount != 0 && $usequantity == 'yes') {
+					 	echo ' '.number_format($amount);
+					 }
 				 echo ')';
+				}
 				 if ($recur == 'fixed') {
 				 	echo ' - Monthly Recurring Payment';
 				 }
@@ -1022,6 +1042,10 @@ function kkd_pff_rave_submit_action() {
 	
 	$filelimit = get_post_meta($_POST["rave-form-id"],'_filelimit',true);
 	$currency = get_post_meta($_POST["rave-form-id"],'_currency',true);
+
+	if($currency == 'open'){
+		$currency = $_POST['rave-currency'];
+	}
 	$formamount = get_post_meta($_POST["rave-form-id"],'_amount',true);/// From form
 	$recur = get_post_meta($_POST["rave-form-id"],'_recur',true);
 	$transaction_charge = get_post_meta($_POST["rave-form-id"],'_merchantamount',true);
@@ -1330,6 +1354,9 @@ function kkd_pff_rave_confirm_payment() {
 		$amount = get_post_meta($payment_array->post_id,'_amount',true);
 		$recur = get_post_meta($payment_array->post_id,'_recur',true);
 		$currency = get_post_meta($payment_array->post_id,'_currency',true);
+		if($currency == 'open'){
+			$currency = $payment_array->currency;
+		}
 		$txncharge = get_post_meta($payment_array->post_id,'_txncharge',true);
 		$redirect = get_post_meta($payment_array->post_id,'_redirect',true);
 		$minimum = get_post_meta($payment_array->post_id,'_minimum',true);
@@ -1349,6 +1376,7 @@ function kkd_pff_rave_confirm_payment() {
 			$emailP = 'customer.email';
 			$rave_email = strtolower($rave_response->data->$emailP);
 			$amount_paid = $rave_response->data->amount;
+			$currency_paid = $rave_response->data->currency;
 			$rave_ref 	= $rave_response->data->tx_ref;
 			if ($recur == 'optional' || $recur == 'plan') {
 				$wpdb->update( $table, array( 'paid' => 1,'amount' =>$amount_paid,'flw_reference' =>$flwReference),array('reference'=>$rave_ref));
@@ -1377,10 +1405,16 @@ function kkd_pff_rave_confirm_payment() {
 						$message = "Invalid amount Paid. Amount required is ".$currency."<b>".number_format($oamount)."</b>";
 						$result = "failed";
 					}else{
-						$wpdb->update( $table, array( 'paid' => 1,'flw_reference' =>$flwReference),array('reference'=>$rave_ref));
-						$thankyou = get_post_meta($payment_array->post_id,'_successmsg',true);
-						$message = $thankyou;
-						$result = "success";
+						if($currency_paid == $currency){
+							$wpdb->update( $table, array( 'paid' => 1,'flw_reference' =>$flwReference),array('reference'=>$rave_ref));
+							$thankyou = get_post_meta($payment_array->post_id,'_successmsg',true);
+							$message = $thankyou;
+							$result = "success";
+						}else{
+							$message = "Payment currency mismatch. Currency required is ".$currency;
+							$result = "failed";
+						}
+						
 					}
 				}
 			}

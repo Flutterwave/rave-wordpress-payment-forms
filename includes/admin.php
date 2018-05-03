@@ -317,8 +317,8 @@ class Kkd_Pff_Rave_Admin {
 							<option value="GHS" '.kkd_pff_rave_check_selected('GHS',$currency).'>GHS</option>
 							<option value="KES" '.kkd_pff_rave_check_selected('KES',$currency).'>KES</option>
 							<option value="NGN" '.kkd_pff_rave_check_selected('NGN',$currency).'>NGN</option>
-							<option value="NGN" '.kkd_pff_rave_check_selected('USD',$currency).'>USD</option>
-							<option value="NGN" '.kkd_pff_rave_check_selected('GBP',$currency).'>GBP</option>
+							<option value="USD" '.kkd_pff_rave_check_selected('USD',$currency).'>USD</option>
+							<option value="GBP" '.kkd_pff_rave_check_selected('GBP',$currency).'>GBP</option>
 							<option value="open" '.kkd_pff_rave_check_selected('open',$currency).'>All Currencies</option>
 						</select>';
 			echo '<p>Amount to be paid(Set 0 for customer input):</p>';
