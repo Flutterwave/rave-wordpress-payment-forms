@@ -1376,7 +1376,8 @@ function kkd_pff_rave_confirm_payment() {
 			$emailP = 'customer.email';
 			$rave_email = strtolower($rave_response->data->$emailP);
 			$amount_paid = $rave_response->data->amount;
-			$currency_paid = $rave_response->data->currency;
+			$currency_paid = $rave_response->data->currency ? $rave_response->data->currency : $rave_response->data->transaction_currency;
+			
 			$rave_ref 	= $rave_response->data->tx_ref;
 			if ($recur == 'optional' || $recur == 'plan') {
 				$wpdb->update( $table, array( 'paid' => 1,'amount' =>$amount_paid,'flw_reference' =>$flwReference),array('reference'=>$rave_ref));
