@@ -582,9 +582,9 @@ function kkd_pff_rave_payment_submissions(){
 
 	}
 }
-add_action( 'admin_post_kkd_pff_export_excel', 'Kkd_pff_export_excel' );
+add_action( 'admin_post_kkd_pff_export_excel', 'Kkd_pff_rave_export_excel' );
 
-function Kkd_pff_export_excel() {
+function Kkd_pff_rave_export_excel() {
 	global $wpdb;
 	
 	$post_id = $_POST['form_id'];
