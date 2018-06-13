@@ -941,27 +941,45 @@ function kkd_pff_rave_textarea_shortcode($atts) {
 }
 add_shortcode('textarea', 'kkd_pff_rave_textarea_shortcode');
 function kkd_pff_rave_input_shortcode($atts) {
-  extract(shortcode_atts(array(
+
+	extract(shortcode_atts(array(
 		'name' => 'Title',
     'required' => '0',
  	), $atts));
-
-	$code = ' <div class="row">
-		<label class="label">'.$name;
+  $code = '<div class="row">
+						<div class="col-md-12">
+		<label class="label"  style="display:block; margin: 30px 0 10px;">'.$name;
 		if ($required == 'required') {
 			 $code.= ' <span>*</span>';
 		}
-	$code.= '</label>
-		<div class="input  append-small-btn">
-		<div class="file-button">
-			Browse
-			<input type="file" name="'.$name.'" onchange="document.getElementById(\'append-small-btn\').value = this.value;"';
+	$code.= '</label><br><input type="file" name="'.$name.'" onchange="document.getElementById(\'append-small-btn\').value = this.value;"';
 	if ($required == 'required') {
 		 $code.= ' required="required" ';
 	}
-	$code.= '" /></div>
-		<input type="text" id="append-small-btn" readonly="" placeholder="no file selected">
-	</div></div>';
+	$code.= '" /></div></div>';
+
+
+//   extract(shortcode_atts(array(
+// 		'name' => 'Title',
+//     'required' => '0',
+//  	), $atts));
+
+// 	$code = ' <div class="row">
+// 		<label class="label">'.$name;
+// 		if ($required == 'required') {
+// 			 $code.= ' <span>*</span>';
+// 		}
+// 	$code.= '</label>
+// 		<div class="input  append-small-btn">
+// 		<div class="file-button">
+// 			Browse
+// 			<input type="file" name="'.$name.'" onchange="document.getElementById(\'append-small-btn\').value = this.value;"';
+// 	if ($required == 'required') {
+// 		 $code.= ' required="required" ';
+// 	}
+// 	$code.= '" /></div>
+// 		<input type="text" id="append-small-btn" readonly="" placeholder="no file selected">
+// 	</div></div>';
   return $code;
 }
 add_shortcode('input', 'kkd_pff_rave_input_shortcode');

@@ -119,27 +119,27 @@ function kkd_pff_rave_shortcode_button_script(){
           function insertRadiob(){
               QTags.insertContent('[radio name="Text Title" options="option 1,option 2,option 3"]');
           }
-          // QTags.addButton(
-          //     "cb_shortcode",
-          //     "Insert Checkbox Options",
-          //     insertCheckboxb
-          // );
+        //   QTags.addButton(
+        //       "cb_shortcode",
+        //       "Insert Checkbox Options",
+        //       insertCheckboxb
+        //   );
           function insertCheckboxb(){
               QTags.insertContent('[checkbox name="Text Title" options="option 1,option 2,option 3"]');
           }
-          // QTags.addButton(
-          //     "dp_shortcode",
-          //     "Insert Datepicker",
-          //     insertDatepickerb
-          // );
+        //   QTags.addButton(
+        //       "dp_shortcode",
+        //       "Insert Datepicker",
+        //       insertDatepickerb
+        //   );
           function insertDatepickerb(){
               QTags.insertContent('[datepicker name="Datepicker Title"]');
           }
-					// QTags.addButton(
-					// 		"i_shortcode",
-					// 		"Insert File Upload",
-					// 		insertInput
-					// );
+					QTags.addButton(
+							"i_shortcode",
+							"Insert File Upload",
+							insertInput
+					);
 					function insertInput(){
 							QTags.insertContent('[input name="File Name"]');
 					}
