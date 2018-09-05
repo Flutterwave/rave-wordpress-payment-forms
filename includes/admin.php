@@ -12,7 +12,7 @@ class Kkd_Pff_Rave_Admin {
 		add_action( 'admin_init', 'kkd_pff_rave_register_setting_page' );
 
 		function kkd_pff_rave_add_settings_page() {
-			add_submenu_page('edit.php?post_type=rave_form', 'Api Keys Settings', 'Api Keys Settings', 'edit_posts', basename(__FILE__), 'kkd_pff_rave_setting_page');
+			add_submenu_page('edit.php?post_type=rave_form', 'Api Keys Settings', 'Api Keys Settings', 'edit_posts',  '' ,'kkd_pff_rave_setting_page');
 		}
 		function kkd_pff_rave_register_setting_page() {
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_mode' );
