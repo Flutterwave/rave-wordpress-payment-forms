@@ -679,7 +679,7 @@ class Kkd_Pff_Rave_Wp_List_Table{
 if( ! class_exists( 'WP_List_Table' ) ) {
    require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
-function format_data($data){
+function setup_data($data){
 	$new = json_decode($data);
 	$text = '';
 	if (array_key_exists("0", $new)) {
@@ -723,7 +723,7 @@ class Kkd_Pff_Rave_Payments_List_Table extends WP_List_Table{
 		          'mode' => $dbdata->mode,
 		          'reference' => $dbdata->reference,
 		          'flwReference' => $dbdata->flw_reference,
-		          'metadata' => format_data($dbdata->metadata),
+		          'metadata' => setup_data($dbdata->metadata),
 		          'date'  => $dbdata->created_at
 				);
 			}
