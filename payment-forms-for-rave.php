@@ -3,7 +3,7 @@
 	Plugin Name:	Payment forms for Rave
 	Plugin URI: 	https://rave.flutterwave.com
 	Description: 	Payment forms for Rave allows you create forms that will be used to bill clients for goods and services via Rave.
-	Version: 		1.0.0
+	Version: 		1.0.1
 	Author: 		Rave
 	Author URI: 	https://rave.flutterwave.com
 	License:        GPL-2.0+

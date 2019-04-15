@@ -580,14 +580,19 @@ function kkd_pff_rave_form_shortcode($atts) {
 
 			  }
 			 if ((($user_id != 0) && ($loggedin == 'yes')) || $loggedin == 'no') {
-			 	if ($hidetitle != 1) {
-			 // echo "<h1 id='pf-form".$id."'>".$obj->post_title."</h1>";
+			//  	if ($hidetitle != 1) {
+			//  // echo "<h1 id='pf-form".$id."'>".$obj->post_title."</h1>";
 			 		
-			 	}
-			 echo '<form version="'.KKD_PFF_RAVE_VERSION.'" enctype="multipart/form-data" action="' . admin_url('admin-ajax.php') . '" url="' . admin_url() . '" method="post" class="rave-form " novalidate>
-				 <div class="form-heading text-center rave-form-header">
-                    <div class="title">'.$obj->post_title.'</div>
-                 </div>';
+			//  	}
+			 echo '<form version="'.KKD_PFF_RAVE_VERSION.'" enctype="multipart/form-data" action="' . admin_url('admin-ajax.php') . '" url="' . admin_url() . '" method="post" class="rave-form" novalidate>';
+			 if ($hidetitle == 1) {
+				echo '<div class="rave-form-header">
+				</div>';
+				}else{
+					echo '<div class="form-heading text-center rave-form-header">
+						<div class="title">'.$obj->post_title.'</div>
+					</div>';
+				}
 			 echo '<input type="hidden" name="action" value="kkd_pff_rave_submit_action">';
 			 echo '<input type="hidden" name="rave-form-id" value="' . $id . '" />';
 			 echo '<input type="hidden" name="rave-user-id" value="' . $user_id. '" />';
