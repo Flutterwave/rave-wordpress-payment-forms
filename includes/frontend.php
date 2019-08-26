@@ -19,21 +19,21 @@ class Kkd_Pff_Rave_Public {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$mode =  esc_attr( get_option('rave_mode'));
+
+		$this->base_url = 'https://api.ravepay.co';
 		$this->mode = $mode;
+
 		if ($mode == 'sandbox') {
 			$this->base_url = 'https://ravesandboxapi.flutterwave.com';
 			$this->public_key = esc_attr( get_option('rave_sandbox_public_key') );
 			$this->secret_key = esc_attr( get_option('rave_sandbox_secret_key') );
 
-     	}else{
+     	} else {
 
      		$this->base_url = 'https://api.ravepay.co';
      		$this->public_key = esc_attr( get_option('rave_live_public_key') );
 			$this->secret_key = esc_attr( get_option('rave_live_secret_key') );
-
-			
-     	}
-
+		}
 	}
 	public function enqueue_styles() {
 
@@ -51,8 +51,7 @@ class Kkd_Pff_Rave_Public {
 		wp_enqueue_script( 'Rave_FJS', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/frontend.js', array( 'jquery' ), $this->version, true ,true  );
 		
 		wp_enqueue_script( 'rave_frontend', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/frontend_form.js', array( 'jquery' ), $this->version, true ,true  );
-		wp_localize_script( 'rave_frontend', 'settings', array('key'=> $this->public_key), $this->version,true, true );
-
+		
 	}
 
 }
@@ -468,28 +467,7 @@ function kkd_pff_rave_send_receipt_owner($id,$currency,$amount,$name,$email,$cod
 	wp_mail($admin_email, $email_subject, $message,$headers);
 
 }
-// function kkd_pff_rave_fetch_plan($code){
-// 	$mode =  esc_attr( get_option('mode') );
-// 	if ($mode == 'test') {
-// 		$key = esc_attr( get_option('tsk') );
-// 	}else{
-// 		$key = esc_attr( get_option('lsk') );
-// 	}
-// 	$rave_url = 'https://api.rave.co/plan/' . $code;
-// 	$headers = array(
-// 		'Authorization' => 'Bearer ' . $key
-// 	);
-// 	$args = array(
-// 		'headers'	=> $headers,
-// 		'timeout'	=> 60
-// 	);
-// 	$request = wp_remote_get( $rave_url, $args );
-// 	if( ! is_wp_error( $request )) {
-// 		$rave_response = json_decode( wp_remote_retrieve_body( $request ) );
 
-// 	}
-// 	return $rave_response;
-// }
 function kkd_pff_rave_fetch_plan( $id) {
  
 	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
@@ -528,7 +506,8 @@ function kkd_pff_rave_form_shortcode($atts) {
       'id' => 0,
    ), $atts));
     $rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
-    $pk = $rave->public_key;
+	$pk = $rave->public_key;
+	
     if(!$pk){
 		$settingslink = get_admin_url().'edit.php?post_type=rave_form&page=class-rave-forms-admin.php';
         echo "<h5>You must set your Rave API keys first <a href='".$settingslink."'>settings</a></h5>";
@@ -538,10 +517,10 @@ function kkd_pff_rave_form_shortcode($atts) {
 		 if ($obj->post_type == 'rave_form') {
 			$amount = get_post_meta($id,'_amount',true);
 		    $thankyou = get_post_meta($id,'_successmsg',true);
-			  $paybtn = get_post_meta($id,'_paybtn',true);
-			  $loggedin = get_post_meta($id,'_loggedin',true);
-			  $txncharge = get_post_meta($id,'_txncharge',true);
-			  $currency = get_post_meta($id,'_currency',true);
+			$paybtn = get_post_meta($id,'_paybtn',true);
+			$loggedin = get_post_meta($id,'_loggedin',true);
+			$txncharge = get_post_meta($id,'_txncharge',true);
+			$currency = get_post_meta($id,'_currency',true);
 			$recur = get_post_meta($id,'_recur',true);
 			$recurplan = get_post_meta($id,'_recurplan',true);
 			$usequantity = get_post_meta($id,'_usequantity',true);
@@ -552,6 +531,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 			$variableamount = get_post_meta($id,'_variableamount',true);
 			$usevariableamount = get_post_meta($id,'_usevariableamount',true);
 			$hidetitle = get_post_meta($id,'_hidetitle',true);
+			
 		    if ($minimum == "") {$minimum = 0;}
 		    if ($usevariableamount == "") {$usevariableamount = 0;}
 
@@ -580,19 +560,14 @@ function kkd_pff_rave_form_shortcode($atts) {
 
 			  }
 			 if ((($user_id != 0) && ($loggedin == 'yes')) || $loggedin == 'no') {
-			//  	if ($hidetitle != 1) {
-			//  // echo "<h1 id='pf-form".$id."'>".$obj->post_title."</h1>";
+			 	if ($hidetitle != 1) {
+			 // echo "<h1 id='pf-form".$id."'>".$obj->post_title."</h1>";
 			 		
-			//  	}
-			 echo '<form version="'.KKD_PFF_RAVE_VERSION.'" enctype="multipart/form-data" action="' . admin_url('admin-ajax.php') . '" url="' . admin_url() . '" method="post" class="rave-form" novalidate>';
-			 if ($hidetitle == 1) {
-				echo '<div class="rave-form-header">
-				</div>';
-				}else{
-					echo '<div class="form-heading text-center rave-form-header">
-						<div class="title">'.$obj->post_title.'</div>
-					</div>';
-				}
+			 	}
+			 echo '<form version="'.KKD_PFF_RAVE_VERSION.'" enctype="multipart/form-data" action="' . admin_url('admin-ajax.php') . '" url="' . admin_url() . '" method="post" class="rave-form " novalidate>
+				 <div class="form-heading text-center rave-form-header">
+                    <div class="title">'.$obj->post_title.'</div>
+                 </div>';
 			 echo '<input type="hidden" name="action" value="kkd_pff_rave_submit_action">';
 			 echo '<input type="hidden" name="rave-form-id" value="' . $id . '" />';
 			 echo '<input type="hidden" name="rave-user-id" value="' . $user_id. '" />';
@@ -600,7 +575,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 
 			 echo '<div class="row">
                     <div class="col-md-12">
-                        <label>Full Name</label>
+                        <label>Full Name(Payer\'s Name)</label>
                         <input type="text" name="rave-fullname" value="' . $fullname. '" required /> 
                     </div>
                 </div>';
@@ -624,10 +599,15 @@ function kkd_pff_rave_form_shortcode($atts) {
 		 				 	 <select class="form-control" name="rave-currency" required >
 		 				 	 		<option value="NGN">NGN</option>
 		 				 	 		<option value="KES">KES</option>
-		 				 	 		<option value="GHS">GHS</option>
+									<option value="GHS">GHS</option>
+									<option value="UGX">UGX</option>
+		 				 	 		<option value="ZAR">ZAR</option>
+									<option value="TZS">TZS</option>
+									<option value="ZMW">ZMW</option>
+		 				 	 		<option value="RWF">RWF</option>
 		 				 	 		<option value="USD">USD</option>
 		 				 	 		<option value="GBP">GBP</option>
-		 				 	 		<option value="GHS">GHS</option>
+		 				 	 		<option value="EUR">EUR</option>
 		 					 </select>
 		 					 <br><br>
 		 				 </div><br>';
@@ -747,7 +727,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 
 
 		  echo(do_shortcode($obj->post_content));
-
+		 
 			if ($useagreement == 'yes'){
 				echo '<div class="row">
 						<div class="col-md-12">
@@ -758,11 +738,18 @@ function kkd_pff_rave_form_shortcode($atts) {
 						
 					</div></div><br>';
 			}
+			echo '<div class="span12 unit">
+					<br>
+					<small><span style="color: red;">*</span> are compulsory</small><br />
+					<img src="https://media.flutterwave.com/images/rave-payment-banner.png" alt="cardlogos"   style="    max-width: 250px;" class=" size-full wp-image-1096" />
+					';
+						
+		echo '</div>';
 			if ($showbtn){
 				echo '
                     <div class="row ">
                         <div class="col-md-12">
-                            <button type="submit"  class="adam-button2 adam-green">'.$paybtn.'</button>
+                            <button type="submit" id="rave-submit"  class="adam-button2 adam-green">'.$paybtn.'</button>
                         </div>
                     </div>
                 <div class="clearfix"></div>';
@@ -784,48 +771,61 @@ function kkd_pff_rave_form_shortcode($atts) {
 add_shortcode( 'rave-form', 'kkd_pff_rave_form_shortcode' );
 
 function kkd_pff_rave_datepicker_shortcode($atts) {
-  extract(shortcode_atts(array(
+  	extract(shortcode_atts(array(
 		'name' => 'Title',
-    'required' => '0',
- 	), $atts));
-  $code = '<div class="row">
-						<div class="col-md-12">
-		<label class="label">'.$name;
-		if ($required == 'required') {
-			 $code.= ' <span>*</span>';
-		}
-	$code.= '</label>
+    	'required' => '0',
+		 ), $atts)
+	);
+
+  	$code = '<div class="row">
+				<div class="col-md-12">
+					<label class="label">'.$name;
+					if ($required == 'required') {
+						$code.= ' <span>*</span>';
+					}
+					$code.= '</label>
 		
-			<input type="text" class="date-picker" name="'.$name.'" ';
-	if ($required == 'required') {
-		 $code.= ' required="required" ';
-	}
-	$code.= '" /></div></div>';
-  return $code;
+					<input type="text" class="date-picker" name="'.$name.'" ';
+					if ($required == 'required') {
+						$code.= ' required="required" ';
+					}
+					$code.= '" />
+				</div>
+			</div>';
+  	return $code;
 }
 add_shortcode('datepicker', 'kkd_pff_rave_datepicker_shortcode');
 
 
 function kkd_pff_rave_text_shortcode($atts) {
-  extract(shortcode_atts(array(
+  	extract(shortcode_atts(array(
 		'name' => 'Title',
-    'required' => '0',
- 	), $atts));
-  $code = '<div class="row">
-						<div class="col-md-12">
-		<label class="label">'.$name;
-		if ($required == 'required') {
-			 $code.= ' <span>*</span>';
-		}
-	$code.= '</label>
-			<input type="text" name="'.$name.'" ';
-	if ($required == 'required') {
-		 $code.= ' required="required" ';
+    	'required' => '0',
+	), $atts));
+	
+	if ($required == 'readonly') {
+		$msg .= '<span style="color:green">(This field will appear when you enter the Student ID)</span>';
 	}
-	$code.= '" /></div></div>';
-  return $code;
+  	$code = '<div class="row">
+				<div class="col-md-12">
+					<label class="label">'.$name .' '.$msg.'';
+					if ($required == 'required') {
+						$code.= ' <span>*</span>';
+					}
+					$code.= '</label>
+					<input type="text" name="'.$name.'" id="'.str_replace(' ', '', $name).'" ';
+					if ($required == 'required') {
+						$code.= ' required="required" ';
+					} else  if ($required == 'readonly') {
+						$code.= 'readonly';
+					}
+					$code.= ' />
+				</div>
+			</div>';
+  	return $code;
 }
 add_shortcode('text', 'kkd_pff_rave_text_shortcode');
+
 function kkd_pff_rave_select_shortcode($atts) {
 	extract(shortcode_atts(array(
 		'name' => 'Title',
@@ -946,45 +946,27 @@ function kkd_pff_rave_textarea_shortcode($atts) {
 }
 add_shortcode('textarea', 'kkd_pff_rave_textarea_shortcode');
 function kkd_pff_rave_input_shortcode($atts) {
-
-	extract(shortcode_atts(array(
+  extract(shortcode_atts(array(
 		'name' => 'Title',
     'required' => '0',
  	), $atts));
-  $code = '<div class="row">
-						<div class="col-md-12">
-		<label class="label"  style="display:block; margin: 30px 0 10px;">'.$name;
+
+	$code = ' <div class="row">
+		<label class="label">'.$name;
 		if ($required == 'required') {
 			 $code.= ' <span>*</span>';
 		}
-	$code.= '</label><br><input type="file" name="'.$name.'" onchange="document.getElementById(\'append-small-btn\').value = this.value;"';
+	$code.= '</label>
+		<div class="input  append-small-btn">
+		<div class="file-button">
+			Browse
+			<input type="file" name="'.$name.'" onchange="document.getElementById(\'append-small-btn\').value = this.value;"';
 	if ($required == 'required') {
 		 $code.= ' required="required" ';
 	}
-	$code.= '" /></div></div>';
-
-
-//   extract(shortcode_atts(array(
-// 		'name' => 'Title',
-//     'required' => '0',
-//  	), $atts));
-
-// 	$code = ' <div class="row">
-// 		<label class="label">'.$name;
-// 		if ($required == 'required') {
-// 			 $code.= ' <span>*</span>';
-// 		}
-// 	$code.= '</label>
-// 		<div class="input  append-small-btn">
-// 		<div class="file-button">
-// 			Browse
-// 			<input type="file" name="'.$name.'" onchange="document.getElementById(\'append-small-btn\').value = this.value;"';
-// 	if ($required == 'required') {
-// 		 $code.= ' required="required" ';
-// 	}
-// 	$code.= '" /></div>
-// 		<input type="text" id="append-small-btn" readonly="" placeholder="no file selected">
-// 	</div></div>';
+	$code.= '" /></div>
+		<input type="text" id="append-small-btn" readonly="" placeholder="no file selected">
+	</div></div>';
   return $code;
 }
 add_shortcode('input', 'kkd_pff_rave_input_shortcode');
@@ -1052,6 +1034,7 @@ function kkd_pff_rave_submit_action() {
 	$metadata = $_POST;
 	$fullname = $_POST['rave-fullname'];
 	$recur = $_POST['rave-recur'];
+	
 	unset($metadata['action']);
 	unset($metadata['rave-recur']);
 	unset($metadata['rave-form-id']);
@@ -1059,6 +1042,7 @@ function kkd_pff_rave_submit_action() {
 	unset($metadata['rave-amount']);
 	unset($metadata['rave-user-id']);
 	unset($metadata['rave-interval']);
+
 
 
 	$fixedmetadata = kkd_pff_rave_meta_as_custom_fields($metadata);
@@ -1079,6 +1063,7 @@ function kkd_pff_rave_submit_action() {
 	$variableamount = get_post_meta($_POST["rave-form-id"],'_variableamount',true);
 	$usevariableamount = get_post_meta($_POST["rave-form-id"],'_usevariableamount',true);
 	$amount = (int)str_replace(' ', '', $_POST["rave-amount"]);
+
 	$variablename = $_POST["rave-vname"];
 	// pf-vname
 	$originalamount = $amount;
@@ -1181,13 +1166,13 @@ function kkd_pff_rave_submit_action() {
 
 					$request = wp_remote_post( $url, $args );
 					if( ! is_wp_error( $request )) {
-						$paystack_response = json_decode(wp_remote_retrieve_body($request));
-						$plancode	= $paystack_response->data->id;
+						$rave_response = json_decode(wp_remote_retrieve_body($request));
+						$plancode	= $rave_response->data->id;
 						$fixedmetadata[] =  array(
 							'display_name' => 'Plan Interval',
 							'variable_name' => 'Plan Interval',
 							'type' => 'text',
-							'value' => $paystack_response->data->interval
+							'value' => $rave_response->data->interval
 						);
 
 					}
@@ -1253,6 +1238,12 @@ function kkd_pff_rave_submit_action() {
 		case 'KES':
 			$country = 'KE';
 			break;
+		case 'TZS':
+			$country = 'TZ';
+			break;
+		case 'ZAR':
+			$country = 'ZA';
+			break;
 		
 		default:
 			$country = 'NG';
@@ -1266,7 +1257,7 @@ function kkd_pff_rave_submit_action() {
 		'email' => $insert['email'],
      	'name' => $fullname,
    	 	'total' => round($amount),
-		'custom_fields' => $fixedmetadata,
+		'meta' => $fixedmetadata,
 		'country' => $country,
 		'key' => $public_key,
 		'currency' => $currency,
@@ -1285,45 +1276,34 @@ function kkd_pff_rave_meta_as_custom_fields($metadata){
 		}
 		if ($key == 'rave-fullname') {
 			$custom_fields[] =  array(
-				'display_name' => 'Full Name',
-				'variable_name' => 'Full_Name',
-	      'type' => 'text',
-	      'value' => $value
+				'metaname' => 'Full Name',
+				'metavalue' => $value
 			);
 		}elseif ($key == 'pf-plancode') {
 			$custom_fields[] =  array(
-				'display_name' => 'Plan',
-				'variable_name' => 'Plan',
-	      'type' => 'text',
-	      'value' => $value
+				'metaname' => 'Plan',
+				'metavalue' => $value
 			);
 		}elseif ($key == 'pf-vname') {
 			$custom_fields[] =  array(
-				'display_name' => 'Payment Option',
-				'variable_name' => 'Payment Option',
-	      'type' => 'text',
-	      'value' => $value
+				'metaname' => 'Payment Option',
+				 'metavalue' => $value
 			);
 		}elseif ($key == 'rave-interval') {
 			$custom_fields[] =  array(
-				'display_name' => 'Plan Interval',
-				'variable_name' => 'Plan Interval',
-	      'type' => 'text',
-	      'value' => $value
+				'metaname' => 'Plan Interval',
+				 'metavalue' => $value
 			);
 		}elseif ($key == 'rave-quantity') {
 			$custom_fields[] =  array(
-				'display_name' => 'Quantity',
-				'variable_name' => 'Quantity',
-	      'type' => 'text',
-	      'value' => $value
+				'metaname' => 'Quantity',
+				'metavalue' => $value
 			);
 		}else{
 			$custom_fields[] =  array(
-				'display_name' => ucwords(str_replace("_", " ", $key)),
-				'variable_name' => $key,
-	      'type' => 'text',
-	      'value' => $value
+			'metaname' =>  ucwords(str_replace("_", " ", $key)),
+	     'metavalue' => $value
+		
 			);
 		}
 
@@ -1452,6 +1432,7 @@ function kkd_pff_rave_confirm_payment() {
 
 	}
 
+	/** Still review this */
 	if ($result == 'success') {
 		///
 		//Create Plan
@@ -1464,7 +1445,7 @@ function kkd_pff_rave_confirm_payment() {
 				$key = esc_attr( get_option('lsk') );
 			}
 			//Create Plan
-			$rave_url = 'https://api.rave.co/subscription';
+			$rave_url = 'https://api.ravepay.co/subscription';
 			$headers = array(
 				'Content-Type'	=> 'application/json',
 				'Authorization' => 'Bearer ' . $key
@@ -1504,6 +1485,8 @@ function kkd_pff_rave_confirm_payment() {
 		}
 
 	}
+	/** end of review */
+
 	$response = array(
      'result' => $result,
      'message' => $message,
@@ -1571,17 +1554,17 @@ function kkd_pff_rave_retry_action() {
 		$transaction_charge = NULL;
 	}
 	 $response = array(
-     'result' => 'success',
-		 'code' => $newcode,
-     'plan' => $plan,
-     'quantity' => $quantity,
-		 'email' => $dbdata->email,
-     'name' => $fullname,
-   	 'total' => $dbdata->amount*100,
-		 'custom_fields' => $fixedmetadata,
-		 'subaccount' => $subaccount,
-		 'txnbearer' => $txnbearer,
-		 'transaction_charge' => $transaction_charge
+     	'result' => 'success',
+		'code' => $newcode,
+		'plan' => $plan,
+		'quantity' => $quantity,
+		'email' => $dbdata->email,
+		'name' => $fullname,
+		'total' => $dbdata->amount*100,
+		'custom_fields' => $fixedmetadata,
+		'subaccount' => $subaccount,
+		'txnbearer' => $txnbearer,
+		'transaction_charge' => $transaction_charge
    );
   echo json_encode($response);
 
@@ -1617,7 +1600,7 @@ function kkd_pff_rave_rconfirm_payment() {
 		}else{
 			$key = esc_attr( get_option('lsk') );
 		}
-		$rave_url = 'https://api.rave.co/transaction/verify/' . $code;
+		$rave_url = 'https://api.ravepay.co/transaction/verify/' . $code;
 		$headers = array(
 			'Authorization' => 'Bearer ' . $key
 		);
