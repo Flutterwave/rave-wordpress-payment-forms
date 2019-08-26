@@ -24,13 +24,13 @@ class Kkd_Pff_Rave_Public {
 		$this->mode = $mode;
 
 		if ($mode == 'sandbox') {
-			// $this->base_url = 'https://ravesandboxapi.flutterwave.com';
+			$this->base_url = 'https://ravesandboxapi.flutterwave.com';
 			$this->public_key = esc_attr( get_option('rave_sandbox_public_key') );
 			$this->secret_key = esc_attr( get_option('rave_sandbox_secret_key') );
 
      	} else {
 
-     		// $this->base_url = 'https://api.ravepay.co';
+     		$this->base_url = 'https://api.ravepay.co';
      		$this->public_key = esc_attr( get_option('rave_live_public_key') );
 			$this->secret_key = esc_attr( get_option('rave_live_secret_key') );
 		}
@@ -596,7 +596,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 
 			 echo '<div class="row">
                     <div class="col-md-12">
-                        <label>Full Name(Payer\'s Name)</label>
+                        <label>Full Name</label>
                         <input type="text" name="rave-fullname" value="' . $fullname. '" required /> 
                     </div>
                 </div>';
@@ -1708,17 +1708,4 @@ function kkd_pff_rave_rconfirm_payment() {
   echo json_encode($response);
 
   die();
-}
-
-//getting the students details from the db
-add_action( 'wp_ajax_kkd_pff_rave_select_student', 'kkd_pff_rave_select_student' );
-add_action( 'wp_ajax_nopriv_kkd_pff_rave_select_student', 'kkd_pff_rave_select_student' );
-
-function kkd_pff_rave_select_student() {
-
-	$student_id = $_POST['stdid'];
- 	global $wpdb;
-	$table = $wpdb->prefix.KKD_PFF_RAVE_STUDENT_TABLE;
-	$record = $wpdb->get_results("SELECT * FROM $table WHERE (student_id = '".$student_id."')");
-	echo wp_send_json($record);
 }

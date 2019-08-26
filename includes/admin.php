@@ -22,15 +22,12 @@ class Kkd_Pff_Rave_Admin {
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_sandbox_secret_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_live_public_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_live_secret_key' );
+			register_setting( 'kkd-pff-rave-settings-group', 'rave_recurring_sandbox_public_key' );	
+			register_setting( 'kkd-pff-rave-settings-group', 'rave_recurring_sandbox_secret_key' );
 
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_recurring_live_public_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_recurring_live_secret_key' );
 		}
-
-	
-		// function kkd_pff_rave_register_student_page() {
-		// 	register_setting( 'kkd-pff-rave-student-group', 'rave_upload' );
-		// }
 
 		function kkd_pff_rave_check_selected($name, $txncharge){
 			if ($name == $txncharge) {
