@@ -381,7 +381,8 @@ class Kkd_Pff_Rave_Admin {
 		  	echo '<p>Redirect to page link after payment(keep blank to use normal success message):</p>';
 			echo '<input ttype="text" name="_redirect" value="' . $redirect  . '" class="widefat" />';
 
-		  
+		}
+
 		function kkd_pff_rave_editor_add_email_data() {
 	  		global $post;
 
@@ -551,8 +552,6 @@ class Kkd_Pff_Rave_Admin {
 		}
 		add_action('save_post', 'kkd_pff_rave_save_data', 1, 2);
 
-	
-	}
 }
 
 	public function enqueue_styles() {
