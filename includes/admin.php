@@ -223,9 +223,13 @@ class Kkd_Pff_Rave_Admin {
 			$table = $wpdb->prefix . KKD_PFF_RAVE_TABLE;
 
 			switch( $column ) {
+				
 				case 'shortcode' :
+					$flw_merchant_assign = get_post_meta($post->ID, '_merchantassign', true);
+					$flw_merchant_assign = ( $flw_merchant_assign == '')? 'default': $flw_merchant_assign;
+
 					echo '<span class="shortcode">
-					<input type="text" class="large-text code" value="[rave-form id=&quot;'.$post_id.'&quot;]"
+					<input type="text" class="large-text code" value="[rave-form id=&quot;'.$post_id.'&quot; merchant=&quot;'.$flw_merchant_assign.'&quot;]"
 					readonly="readonly" onfocus="this.select();"></span>';
 
 					break;
