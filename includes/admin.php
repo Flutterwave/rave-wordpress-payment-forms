@@ -18,12 +18,14 @@ class Kkd_Pff_Rave_Admin {
 
 		function kkd_pff_rave_register_setting_page() {
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_mode' );
+			register_setting( 'kkd-pff-rave-settings-group', 'rave_merchant_accounts' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_sandbox_public_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_sandbox_secret_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_live_public_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_live_secret_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_recurring_live_public_key' );
 			register_setting( 'kkd-pff-rave-settings-group', 'rave_recurring_live_secret_key' );
+			
 		}
 
 	
@@ -81,6 +83,24 @@ class Kkd_Pff_Rave_Admin {
 					<tr valign="top">
 						<th scope="row">Live Secret Key</th>
 						<td><input type="text" name="rave_live_secret_key" value="<?php echo esc_attr( get_option('rave_live_secret_key') ); ?>" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row">Add Other Merchant Accounts</th>
+						<td>
+							<select class="form-control" name="rave_merchant_accounts" id="parent_id">
+								<option value="none">--Select--</option>
+								<option value="one" <?php echo kkd_pff_rave_check_selected('one',esc_attr( get_option('rave_merchant_accounts') )) ?>>One</option>
+								<option value="two" <?php echo kkd_pff_rave_check_selected('two',esc_attr( get_option('rave_merchant_accounts') )) ?>>Two</option>
+								<option value="three" <?php echo kkd_pff_rave_check_selected('three',esc_attr( get_option('rave_merchant_accounts') )) ?>>Three</option>
+								<option value="four" <?php echo kkd_pff_rave_check_selected('four',esc_attr( get_option('rave_merchant_accounts') )) ?>>Four</option>
+								<option value="five" <?php echo kkd_pff_rave_check_selected('five',esc_attr( get_option('rave_merchant_accounts') )) ?>>Five</option>
+								<option value="six" <?php echo kkd_pff_rave_check_selected('six',esc_attr( get_option('rave_merchant_accounts') )) ?>>Six</option>
+								<option value="seven" <?php echo kkd_pff_rave_check_selected('seven',esc_attr( get_option('rave_merchant_accounts') )) ?>>Seven</option>
+								<option value="eight" <?php echo kkd_pff_rave_check_selected('eight',esc_attr( get_option('rave_merchant_accounts') )) ?>>Eight</option>
+								<option value="nine" <?php echo kkd_pff_rave_check_selected('nine',esc_attr( get_option('rave_merchant_accounts') )) ?>>Nine</option>
+								<option value="ten" <?php echo kkd_pff_rave_check_selected('ten',esc_attr( get_option('rave_merchant_accounts') )) ?>>Ten</option>
+							</select>
+						</td>
 					</tr>
 				</table>
 
@@ -203,9 +223,13 @@ class Kkd_Pff_Rave_Admin {
 			$table = $wpdb->prefix . KKD_PFF_RAVE_TABLE;
 
 			switch( $column ) {
+				
 				case 'shortcode' :
+					$flw_merchant_assign = get_post_meta($post->ID, '_merchantassign', true);
+					$flw_merchant_assign = ( $flw_merchant_assign == '')? 'default': $flw_merchant_assign;
+
 					echo '<span class="shortcode">
-					<input type="text" class="large-text code" value="[rave-form id=&quot;'.$post_id.'&quot;]"
+					<input type="text" class="large-text code" value="[rave-form id=&quot;'.$post_id.'&quot; merchant=&quot;'.$flw_merchant_assign.'&quot;]"
 					readonly="readonly" onfocus="this.select();"></span>';
 
 					break;
@@ -265,12 +289,15 @@ class Kkd_Pff_Rave_Admin {
 		}
 
 		function kkd_pff_rave_editor_shortcode_details( $post ) {
+			$flw_merchant_assign = get_post_meta($post->ID, '_merchantassign', true);
+			if ($flw_merchant_assign == "") {$flw_merchant_assign = 'default';}
 			?>
+			
 			<p class="description">
 				<label for="wpcf7-shortcode">Copy this shortcode and paste it into your post, page, or text widget content:</label>
 				<span class="shortcode wp-ui-highlight">
 				<input type="text" id="wpcf7-shortcode" onfocus="this.select();" readonly="readonly" class="large-text code" 
-				value="[rave-form id=&quot;<?php echo $post->ID; ?>&quot;]"></span>
+				value="[rave-form id=&quot;<?php echo $post->ID; ?>&quot; merchant=&quot;<?php echo $flw_merchant_assign;?>&quot;]"></span>
 			</p>
 
 		<?php
@@ -290,6 +317,116 @@ class Kkd_Pff_Rave_Admin {
 			add_meta_box('kkd_pff_rave_editor_add_quantity_data', 'Quantity Payment', 'kkd_pff_rave_editor_add_quantity_data', 'rave_form', 'side', 'default');
 			add_meta_box('kkd_pff_rave_editor_add_agreement_data', 'Agreement checkbox', 'kkd_pff_rave_editor_add_agreement_data', 'rave_form', 'side', 'default');
 				
+		}
+
+		/**
+		 * Register meta box(es).
+		 */
+		function flutterwave_merchant_list() {
+			add_meta_box( 'flutterwave_metabox_1', 'Flutterwave Account', 'flutterwave_add_merchant_callback', 'rave_form', 'side');
+		  }
+		  add_action( 'add_meta_boxes', 'flutterwave_merchant_list' );
+		  
+		/**
+		* Meta box display callback.
+		*
+		* @param WP_Post $post Current post object.
+		*/
+		function flutterwave_add_merchant_callback( $post ) {
+	
+			$flutterwave_data = get_option('rave_merchant_accounts');
+			$flw_merchant_assign = get_post_meta($post->ID, '_merchantassign', true);
+			if ($flw_merchant_assign == "") {$flw_merchant_assign = 'default';}
+			// <option value="optional" '.kkd_pff_rave_check_selected('optional',$recur).'>Optional Recurring</option>
+			
+				echo '<p> Assigned Merchant:   </p>';
+				echo '<select name="_merchant_assign">';
+				echo '<option value="default"'.kkd_pff_rave_check_selected('default',$flw_merchant_assign).'>--Default--</option>';
+			switch ($flutterwave_data) {
+				case 'one':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					break;
+				case 'two':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					break;
+				case 'three':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					break;
+				case 'four':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="one"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					break;
+				case 'five':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="four"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					echo '<option value="five"'.kkd_pff_rave_check_selected('five',$flw_merchant_assign).'>Five</option>';
+					break;
+				case 'six':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="four"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					echo '<option value="five"'.kkd_pff_rave_check_selected('five',$flw_merchant_assign).'>Five</option>';
+					echo '<option value="six"'.kkd_pff_rave_check_selected('six',$flw_merchant_assign).'>Six</option>';
+					break;
+				case 'seven':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="four"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					echo '<option value="five"'.kkd_pff_rave_check_selected('five',$flw_merchant_assign).'>Five</option>';
+					echo '<option value="six"'.kkd_pff_rave_check_selected('six',$flw_merchant_assign).'>Six</option>';
+					echo '<option value="seven"'.kkd_pff_rave_check_selected('seven',$flw_merchant_assign).'>Seven</option>';
+					break;
+				case 'eight':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="four"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					echo '<option value="five"'.kkd_pff_rave_check_selected('five',$flw_merchant_assign).'>Five</option>';
+					echo '<option value="six"'.kkd_pff_rave_check_selected('six',$flw_merchant_assign).'>Six</option>';
+					echo '<option value="seven"'.kkd_pff_rave_check_selected('seven',$flw_merchant_assign).'>Seven</option>';
+					echo '<option value="eight"'.kkd_pff_rave_check_selected('eight',$flw_merchant_assign).'>Eight</option>';
+					break;
+				case 'nine':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="four"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					echo '<option value="five"'.kkd_pff_rave_check_selected('five',$flw_merchant_assign).'>Five</option>';
+					echo '<option value="six"'.kkd_pff_rave_check_selected('six',$flw_merchant_assign).'>Six</option>';
+					echo '<option value="seven"'.kkd_pff_rave_check_selected('seven',$flw_merchant_assign).'>Seven</option>';
+					echo '<option value="eight"'.kkd_pff_rave_check_selected('eight',$flw_merchant_assign).'>Eight</option>';
+					echo '<option value="nine"'.kkd_pff_rave_check_selected('nine',$flw_merchant_assign).'>Nine</option>';
+					break;
+				case 'ten':
+					echo '<option value="one"'.kkd_pff_rave_check_selected('one',$flw_merchant_assign).'>One</option>';
+					echo '<option value="two"'.kkd_pff_rave_check_selected('two',$flw_merchant_assign).'>Two</option>';
+					echo '<option value="three"'.kkd_pff_rave_check_selected('three',$flw_merchant_assign).'>Three</option>';
+					echo '<option value="four"'.kkd_pff_rave_check_selected('four',$flw_merchant_assign).'>Four</option>';
+					echo '<option value="five"'.kkd_pff_rave_check_selected('five',$flw_merchant_assign).'>Five</option>';
+					echo '<option value="six"'.kkd_pff_rave_check_selected('six',$flw_merchant_assign).'>Six</option>';
+					echo '<option value="seven"'.kkd_pff_rave_check_selected('seven',$flw_merchant_assign).'>Seven</option>';
+					echo '<option value="eight"'.kkd_pff_rave_check_selected('eight',$flw_merchant_assign).'>Eight</option>';
+					echo '<option value="nine"'.kkd_pff_rave_check_selected('nine',$flw_merchant_assign).'>Nine</option>';
+					echo '<option value="ten"'.kkd_pff_rave_check_selected('ten',$flw_merchant_assign).'>Ten</option>';
+					break;
+				default:
+					# code...
+					break;
+			}
+
+			echo ' </select>';
+	
+			// check_flw_option($flutterwave_data);
+		
 		}
 
 
@@ -534,6 +671,7 @@ class Kkd_Pff_Rave_Admin {
 
 			$form_meta['_useagreement'] = $_POST['_useagreement'];
 			$form_meta['_agreementlink'] = $_POST['_agreementlink'];
+			$form_meta['_merchantassign'] = $_POST['_merchant_assign'];
 			
 			// Add values of $form_meta as custom fields
 

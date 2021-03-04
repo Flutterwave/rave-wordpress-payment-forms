@@ -4,37 +4,163 @@ require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 require_once(ABSPATH . "wp-admin" . '/includes/file.php');
 require_once(ABSPATH . "wp-admin" . '/includes/media.php');
 
+$rave_object = "";
+
 class Kkd_Pff_Rave_Public {
 
 	private $plugin_name;
-
 	private $version;
 	public $public_key;
 	public $mode;
 	public $secret_key;
 	public $base_url;
+	public $some_attributes;
 
-	public function __construct( $plugin_name, $version ) {
-
+	public function __construct( $plugin_name, $version) {
+		
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
-		$mode =  esc_attr( get_option('rave_mode'));
-
+		$mode =  esc_attr( get_option('rave_mode'));//default merchant
+		$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key'));
+		$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key'));
+		$live_pubKey = esc_attr(get_option('rave_live_public_key'));
+		$live_secKey = esc_attr(get_option('rave_live_secret_key'));
 		$this->base_url = 'https://api.ravepay.co';
+		//add_action( 'init', array($this, 'init'));
+	}
+
+	public function init($flw_merchant_assign = 'default'){
+		
+			if ($flw_merchant_assign == 'one') {
+					$mode =  esc_attr( get_option('rave_mode_1'));//merchant 1
+					$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_1'));
+					$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_1'));
+					$live_pubKey = esc_attr(get_option('rave_live_public_key_1'));
+					$live_secKey = esc_attr(get_option('rave_live_secret_key_1'));
+			}
+
+			if($flw_merchant_assign == 'two'){ 
+
+					$mode =  esc_attr( get_option('rave_mode_2'));//merchant 2
+					$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_2'));
+					$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_2'));
+					$live_pubKey = esc_attr(get_option('rave_live_public_key_2'));
+					$live_secKey = esc_attr(get_option('rave_live_secret_key_2'));		
+
+			}
+
+			if($flw_merchant_assign == 'three'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_3'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_3'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_3'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_3'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_3'));
+			
+			}
+
+			if($flw_merchant_assign == 'four'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_4'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_4'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_4'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_4'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_4'));
+			
+			}
+
+			if($flw_merchant_assign == 'five'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_5'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_5'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_5'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_5'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_5'));
+			
+			}
+
+			if($flw_merchant_assign == 'six'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_6'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_6'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_6'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_6'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_6'));
+			
+			}
+
+			if($flw_merchant_assign == 'seven'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_7'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_7'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_7'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_7'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_7'));
+			
+			}
+
+			if($flw_merchant_assign == 'eight'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_8'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_8'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_8'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_8'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_8'));
+			
+			}
+
+			if($flw_merchant_assign == 'nine'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_9'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_9'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_9'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_9'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_9'));
+			
+			}
+
+			if($flw_merchant_assign == 'ten'){ 
+
+				$mode =  esc_attr( get_option('rave_mode_10'));//merchant 3
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key_10'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key_10'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key_10'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key_10'));
+			
+			}
+
+
+			if($flw_merchant_assign == 'default'){
+				$mode =  esc_attr( get_option('rave_mode'));//default merchant
+				$sandbox_pubKey = esc_attr(get_option('rave_sandbox_public_key'));
+				$sandbox_secKey = esc_attr(get_option('rave_sandbox_secret_key'));
+				$live_pubKey = esc_attr(get_option('rave_live_public_key'));
+				$live_secKey = esc_attr(get_option('rave_live_secret_key'));
+		
+			}
+		
+
+
+		
 		$this->mode = $mode;
 
-		if ($mode == 'sandbox') {
-			$this->base_url = 'https://ravesandboxapi.flutterwave.com';
-			$this->public_key = esc_attr( get_option('rave_sandbox_public_key') );
-			$this->secret_key = esc_attr( get_option('rave_sandbox_secret_key') );
+		if ($this->mode == 'sandbox') {
+			$this->public_key = $sandbox_pubKey;
+			$this->secret_key = $sandbox_secKey;
 
-     	} else {
-
-     		$this->base_url = 'https://api.ravepay.co';
-     		$this->public_key = esc_attr( get_option('rave_live_public_key') );
-			$this->secret_key = esc_attr( get_option('rave_live_secret_key') );
+		 } else {
+			 $this->public_key = $live_pubKey;
+		     $this->secret_key = $live_secKey;
 		}
+
+		// echo $mode;
+		// echo $sandbox_pubKey;
+		// echo $sandbox_secKey;
+		// exit();
+
 	}
+
+
 	public function enqueue_styles() {
 
 		 wp_enqueue_style( 'bootstrap', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/bootstrap.min.css', array(), $this->version, 'all' );
@@ -42,10 +168,11 @@ class Kkd_Pff_Rave_Public {
 		 wp_enqueue_style( $this->plugin_name.'2', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/css/font-awesome.min.css', array(), $this->version, 'all' );
 
 	}
+	
 
 
 	public function enqueue_scripts() {
-
+		
 		wp_register_script('Rave_inline', $this->base_url . '/flwv3-pug/getpaidx/api/flwpbf-inline.js', false, '1');
 		wp_enqueue_script('Rave_inline');
 		wp_enqueue_script( 'Rave_FJS', plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/frontend.js', array( 'jquery' ), $this->version, true ,true  );
@@ -57,6 +184,10 @@ class Kkd_Pff_Rave_Public {
 }
 
 
+function set_atts_now($ar){
+	global $rave_object;
+	$rave_object = $ar;
+}
 
 
 add_filter ("wp_mail_content_type", "kkd_pff_rave_mail_content_type");
@@ -468,9 +599,9 @@ function kkd_pff_rave_send_receipt_owner($id,$currency,$amount,$name,$email,$cod
 
 }
 
-function kkd_pff_rave_fetch_plan( $id) {
+function kkd_pff_rave_fetch_plan( $id, $rave) {
  
-	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+	// $rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
 	
 	$secret_key = $rave->secret_key;
 	
@@ -505,11 +636,30 @@ function kkd_pff_rave_form_shortcode($atts) {
 		extract(shortcode_atts(array(
       'id' => 0,
    ), $atts));
-    $rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+
+   if(!array_key_exists('merchant', $atts)){
+		$atts['merchant'] = 'default';
+   }
+
+   global $wpdb;
+   global $post;
+   $table = $wpdb->prefix.'postmeta';
+   $o_exist = $wpdb->get_results("SELECT meta_value FROM $table WHERE post_id = '".$atts['id']."' AND meta_key = '_merchantassign'");
+	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+	$rave->init($o_exist[0]->meta_value);
 	$pk = $rave->public_key;
+	set_atts_now(['secret_key' => $rave->secret_key,'public_key' => $rave->public_key, 'mode' => $rave->mode, 'id' => $atts['id'],'merchant' => $o_exist[0]->meta_value ]);
+	global $rave_object;
+	// echo $pk;
+   	// echo $rave_object['public_key'];
+	// exit();
 	
     if(!$pk){
-		$settingslink = get_admin_url().'edit.php?post_type=rave_form&page=class-rave-forms-admin.php';
+		if(isset($atts['merchant']) && $atts['merchant'] != 'default'){
+				$settingslink = get_admin_url().'edit.php?post_type=rave_form&page=merchant-'.$atts['merchant'].'.php';
+		}else{
+			$settingslink = get_admin_url().'edit.php?post_type=rave_form&page=class-rave-forms-admin.php';	
+		}
         echo "<h5>You must set your Rave API keys first <a href='".$settingslink."'>settings</a></h5>";
     }
     else if ($id != 0) {
@@ -548,7 +698,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 					if ($recurplan == '' || $recurplan == null) {
 						$showbtn = false;
 					}else{
-						$plan =	kkd_pff_rave_fetch_plan($recurplan);
+						$plan =	kkd_pff_rave_fetch_plan($recurplan, $rave);
 						if ($plan->data->page_info->total == 1) {
 
 							$planamount = $plan->data->paymentplans[0]->amount;
@@ -572,7 +722,7 @@ function kkd_pff_rave_form_shortcode($atts) {
 			 echo '<input type="hidden" name="rave-form-id" value="' . $id . '" />';
 			 echo '<input type="hidden" name="rave-user-id" value="' . $user_id. '" />';
 			 echo '<input type="hidden" name="rave-recur" value="' . $recur. '" />';
-
+			 echo '<input type="hidden" name="rave-atts-merchant" value="' . $atts['merchant']. '" />';
 			 echo '<div class="row">
                     <div class="col-md-12">
                         <label>Full Name(Payer\'s Name)</label>
@@ -805,6 +955,8 @@ function kkd_pff_rave_text_shortcode($atts) {
 	
 	if ($required == 'readonly') {
 		$msg .= '<span style="color:green">(This field will appear when you enter the Student ID)</span>';
+	}else{
+		$msg = '';
 	}
   	$code = '<div class="row">
 				<div class="col-md-12">
@@ -1018,6 +1170,7 @@ function kkd_pff_rave_get_the_user_ip() {
 add_action( 'wp_ajax_kkd_pff_rave_submit_action', 'kkd_pff_rave_submit_action' );
 add_action( 'wp_ajax_nopriv_kkd_pff_rave_submit_action', 'kkd_pff_rave_submit_action' );
 function kkd_pff_rave_submit_action() {
+	
 	if (trim($_POST['rave-email']) == '') {
 	    $response['result'] = 'failed';
 	  	$response['message'] = 'Email is required';
@@ -1063,6 +1216,7 @@ function kkd_pff_rave_submit_action() {
 	$variableamount = get_post_meta($_POST["rave-form-id"],'_variableamount',true);
 	$usevariableamount = get_post_meta($_POST["rave-form-id"],'_usevariableamount',true);
 	$amount = (int)str_replace(' ', '', $_POST["rave-amount"]);
+	$short_id = $_POST["rave-form-id"];
 
 	$variablename = $_POST["rave-vname"];
 	// pf-vname
@@ -1142,10 +1296,11 @@ function kkd_pff_rave_submit_action() {
 			$interval = $_POST['rave-interval'];
 			if ($interval != 'no') {
 				unset($metadata['rave-interval']);
-					
-					
+
+					$table_pm = $wpdb->prefix.'postmeta';
+					$or_exist = $wpdb->get_results("SELECT meta_value FROM $table_pm WHERE post_id = '".$short_id."' AND meta_key = '_merchantassign'");
 					$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
-	
+					$rave->init($or_exist[0]->meta_value);	
 					$secret_key = $rave->secret_key;
 
 					$url = $rave->base_url . '/v2/gpx/paymentplans/create';
@@ -1193,10 +1348,13 @@ function kkd_pff_rave_submit_action() {
 	if(($recur == 'optional' && $interval != 'no') || ($recur == 'fixed')){
 		$is_recurring = 1;
 	}
-	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
-	$public_key = $rave->public_key;
 
-	
+
+	$table_pmx = $wpdb->prefix.'postmeta';
+	$or_exist = $wpdb->get_results("SELECT meta_value FROM $table_pmx WHERE post_id = '".$short_id."' AND meta_key = '_merchantassign'");
+	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+	$rave->init($or_exist[0]->meta_value);
+	$public_key = $rave->public_key;
 
 	$insert =  array(
     	'post_id' => strip_tags($_POST["rave-form-id"], ""),
@@ -1313,27 +1471,36 @@ function kkd_pff_rave_meta_as_custom_fields($metadata){
 
 add_action( 'wp_ajax_kkd_pff_rave_confirm_payment', 'kkd_pff_rave_confirm_payment' );
 add_action( 'wp_ajax_nopriv_kkd_pff_rave_confirm_payment', 'kkd_pff_rave_confirm_payment' );
-function getTransactionDetails( $flwReference) {
- 
+function getTransactionDetails( $reference, $flw_merchant_assign) {
 	$rave = new Kkd_Pff_Rave_Public('rave',KKD_PFF_RAVE_VERSION);
+	$rave->init($flw_merchant_assign);
 	
 	$secret_key = $rave->secret_key;
 	
-  	$url = $rave->base_url . '/flwv3-pug/getpaidx/api/verify';
-  	$args = array(
-	    'body' => array(
-	      	'flw_ref' => $flwReference,
-	      	'SECKEY' => $secret_key 
-	    ),
-	    'sslverify' => false
-  	);
+	$headers = array(
+        'Content-Type'	=> 'application/json'
+    );
 
-	$response = wp_remote_post( $url, $args );
-	$result = wp_remote_retrieve_response_code( $response );
+    $body = array(
+        'flw_ref' => $reference,
+        'SECKEY' => $secret_key
+    );
+    $args = array(
+        'body'		=> json_encode( $body ),
+        'headers'	=> $headers,
+        'timeout'	=> 60
+    );
 
-	if( $result === 200 ){
-	    return wp_remote_retrieve_body( $response );
-	}
+    $rave_url =  'https://api.ravepay.co/flwv3-pug/getpaidx/api/verify';
+
+    $result = wp_remote_post( $rave_url, $args );
+
+    if( ! is_wp_error( $result )) {
+        
+        // $message.= $message.'Subscribed<br>'.$plancode.'sssss';
+		return wp_remote_retrieve_body($result);
+
+    }
 
   return $result;
 
@@ -1357,6 +1524,7 @@ function kkd_pff_rave_confirm_payment() {
 		$amount = get_post_meta($payment_array->post_id,'_amount',true);
 		$recur = get_post_meta($payment_array->post_id,'_recur',true);
 		$currency = get_post_meta($payment_array->post_id,'_currency',true);
+
 		if($currency == 'open'){
 			$currency = $payment_array->currency;
 		}
@@ -1365,6 +1533,7 @@ function kkd_pff_rave_confirm_payment() {
 		$minimum = get_post_meta($payment_array->post_id,'_minimum',true);
 		$usevariableamount = get_post_meta($payment_array->post_id,'_usevariableamount',true);
 		$variableamount = get_post_meta($payment_array->post_id,'_variableamount',true);
+		$flw_merchant_assign = get_post_meta($payment_array->post_id,'_merchantassign',true);
 
 		if ($minimum == 1 && $amount != 0) {
 			if ($payment_array->amount < $formamount) {
@@ -1374,8 +1543,9 @@ function kkd_pff_rave_confirm_payment() {
 			}
 		}
 		$oamount = (int)$amount;
-		$rave_response = json_decode(getTransactionDetails($flwReference,$payment_array->recur));
-		if ($rave_response->data->flwMeta->chargeResponse === '00' || $rave_response->data->flwMeta->chargeResponse === '0') {
+		$rave_response = json_decode(getTransactionDetails($flwReference, $flw_merchant_assign));
+		//Here is the source of the problem.....
+		if ($rave_response->data->chargecode === '00' || $rave_response->data->status === 'successful') {
 			$emailP = 'customer.email';
 			$rave_email = strtolower($rave_response->data->$emailP);
 			$amount_paid = $rave_response->data->amount;
@@ -1423,7 +1593,7 @@ function kkd_pff_rave_confirm_payment() {
 			}
 
 		}else {
-			$message = "Transaction Failed/Invalid Code";
+			$message = "Transaction Failed/Invalid Code reponse:";
 			$result = "failed";
 		}
 	}else{
