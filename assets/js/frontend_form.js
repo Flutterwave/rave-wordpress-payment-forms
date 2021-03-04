@@ -181,7 +181,7 @@
 
 				$('#rave-form-loader').show();
 				var formdata = new FormData(this);
-
+				
 				$.ajax({
 				     url: $form.attr('action'),
 				     type: "POST",
@@ -221,8 +221,7 @@
 												'action':'kkd_pff_rave_confirm_payment',
 												'reference':response.tx.txRef,
 												'quantity':quantity,
-												'flwReference':flw_ref,
-
+												'flwReference':response.tx.flwRef,
 											}, function(newdata) {
 				 									data = JSON.parse(newdata);
 				 									if (data.result == 'success2'){
@@ -277,7 +276,7 @@
 												'action':'kkd_pff_rave_confirm_payment',
 												'reference':response.tx.txRef,
 												'quantity':quantity,
-												'flwReference':flw_ref,
+												'flwReference':response.tx.flwRef,
 
 											}, function(newdata) {
 				 									data = JSON.parse(newdata);
